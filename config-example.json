@@ -1,0 +1,130 @@
+{
+    // set some defaults
+    "config": {
+        "defaultLedColor": [0,255,0],
+        "defaultScreenForeColor": [0,255,0]
+    },
+    // the unit has built-in modes, and custom modes the user can define
+    "modes": [
+        {
+            // this built-in mode allows the user to select a different mode
+            "name": "ModeSelect",
+            "modeType": "BuiltIn",
+            "actions": [
+                {
+                    // press button 1 to go up a mode
+                    "buttons": [1],
+                    // define what will appear on the screen for this button
+                    "screenText": ">",
+                    "onPress": [
+                        {
+                            "actionType": "ModeUp"
+                        }
+                    ]
+                },{
+                    // press button 2 to go down a mode
+                    "buttons": [2],
+                    "screenText": "<",
+                    "onPress": [
+                        {
+                            "actionType": "ModeDown"
+                        }
+                    ]
+                },{
+                    // press button 3 to choose the selected mode
+                    "buttons": [3],
+                    "screenText": "OK",
+                    "onPress": [
+                        {
+                            "actionType": "ChooseMode"
+                        }
+                    ]
+                }
+            ]
+        },{
+            // this custom mode sends MIDI notes
+            "name": "Notes",
+            // this description will appear on the screen when cycling through the modes
+            "description": "Send MIDI notes",
+            "modeType": "Custom",
+            // set some optional defaults for this mode
+            "defaults": {
+                "key": "C major",
+                "octave": 3
+            },
+            // set the actions when buttons are pressed
+            "actions": [
+                {
+                    // press button 1 to send a MIDI note message
+                    "buttons": [1],
+                    // show something on the screen for this button
+                    "screenText": "F#", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                        // we trigger other events here as well
+                    ]
+                },{
+                    // this button changes the octave up
+                    "buttons": [3],
+                    "screenText": "Octv UP",
+                    "onPress": [
+                        {
+                            // this is a built in action which affects MIDI notes played
+                            "actionType": "ChangeOctave",
+                            "parameters": {
+                                "direction": "Up"
+                            }
+                        }
+                    ]
+                },{
+                    // and this changes the octave down
+                    "buttons": [3],
+                    "screenText": "Octv DN",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeOctave",
+                            "parameters": {
+                                "direction": "Down"
+                            }
+                        }
+                    }
+                },{
+                    // when pressing buttons 1 and 2 together
+                    "buttons": [1,2],
+                    // we don't show anything on the screen for this combination
+                    // basically because I haven't worked out how to do that
+                    "onPress": [
+                        {
+                            // change the mode...
+                            "actionType": "ChangeMode",
+                            "parameters": {
+                                // to the built-in ModeSelect mode
+                                "toMode": "ModeSelect"
+                            }
+                        }
+                    ]
+                }
+                // we could add actions to the other buttons, like change key up or down, change octave etc
+            ]
+        }
+    ]
+}
