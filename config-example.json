@@ -106,7 +106,7 @@
                                 "direction": "Down"
                             }
                         }
-                    }
+                    ]
                 },{
                     // when pressing buttons 1 and 2 together
                     "buttons": [1,2],
