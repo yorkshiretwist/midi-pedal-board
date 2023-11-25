@@ -348,9 +348,9 @@
                 padding-top: calc(var(--scale) * 2);
                 font-size: 0.9vw;
             }
-            #enter {
-                grid-column-start: 7;
-                grid-row-start: 3;
+            #change-mode {
+                grid-column-start: 3;
+                grid-row-start: 6;
             }
             #cancel {
                 grid-column-start: 9;
@@ -414,16 +414,6 @@
     <body data-colour="blue">
         <header>
             <h1>MIDI Pedal Board</h1>
-            <!--
-            <ul>
-                <li>
-                    <a href="#chordMode">Chord mode</a>
-                </li>
-                <li>
-                    <a href="#noteMode">Note mode</a>
-                </li>
-            </ul>
-            -->
         </header>
         <section id="pedal-board">
             <div id="screen"></div>
@@ -437,13 +427,14 @@
                 <button class="finger-switch" id="f4">&#x25BC;</button>
             </div>
             -->
-            <button class="foot-switch row-1 number-button" id="button-1" data-note-index="0"></button>
-            <button class="foot-switch row-1 number-button" id="button-2" data-note-index="1"></button>
-            <button class="foot-switch row-1 number-button" id="button-3" data-note-index="2"></button>
-            <button class="foot-switch row-1 number-button" id="button-4" data-note-index="3"></button>
-            <button class="foot-switch row-2 letter-button" id="button-a"></button>
-            <button class="foot-switch row-2 letter-button" id="button-b"></button>
-            <button class="foot-switch row-2 letter-button" id="button-c"></button>
+            <button class="foot-switch row-1 number-button" id="button-1" data-button-id="1"></button>
+            <button class="foot-switch row-1 number-button" id="button-2" data-button-id="2"></button>
+            <button class="foot-switch row-1 number-button" id="button-3" data-button-id="3"></button>
+            <button class="foot-switch row-1 number-button" id="button-4" data-button-id="4"></button>
+            <button class="foot-switch row-2 letter-button" id="button-a" data-button-id="a"></button>
+            <button class="foot-switch row-2 letter-button" id="button-b" data-button-id="b"></button>
+            <button class="foot-switch row-2 letter-button" id="button-c" data-button-id="c"></button>
+            <button class="double-switch" id="change-mode" data-button-id="1-2">&#8212; &nbsp; &nbsp; &nbsp; &nbsp; Select Mode &nbsp; &nbsp; &nbsp; &nbsp; &#8212;</button>
         </section>
         <section id="options">
             <ul>
@@ -479,42 +470,6 @@
                 </li>
             </ul>
         </section>
-        <section id="help">
-            <article id="chordMode">
-                <h2>Chord mode (press escape to close)</h2>
-                <p>Chord mode sends a set of MIDI note messages, great for playing a pad or string sound. The notes sent depend on the chosen key, the selected root note, the selected octave, and the chord spread.</p>
-                <p>Five chords are available in each key (plus 5 in the relative minor key). Buttons 1 - 5 change the chord. In a major key the chords are:</p>
-                <ul>
-                    <li>1: Chord 1 (tonic)</li>
-                    <li>2: Chord 2 (supertonic)</li>
-                    <li>3: Chord 4 (subdominant)</li>
-                    <li>4: Chord 5 (dominant)</li>
-                    <li>5: Chord 6 (submediant)</li>
-                </ul>
-                <p>Pressing a button triggers the chord and will keep it playing. Pressing the same button again will stop the chord playing. Pressing a different button 1 - 5 will stop the current chord playing and trigger the new chord.</p>
-                <p>The left (&#x25C0;) and right (&#x25B6;) buttons change the octave, with the initial octave being 3 (i.e. C3 and up). The minimum octave is 0 and the maximum is 6.</p>
-                <p>The up (&#x25B2;) and down (&#x25BC;) buttons change the key. These buttons round the 12 chromatic notes, with C the default key.</p>
-                <p>The A -C buttons set the chord spread. This is how many notes the chord contains, and therefore how 'big' the chord sounds. I have some ideas about how complex this could be, but can't be bothered typing it all out now.</p>
-            </article>
-            <article id="noteMode">
-                <h2>Note mode (press escape to close)</h2>
-                <p>Note mode sends a MIDI note message, which can be used to trigger samples or play a sound on a MIDI instrument. The note sent depends on the selected 1 - 5 or A - B button, and the selected octave.</p>
-                <p>Eight notes are available in each key. Buttons 1 - 5 and A - B send the following notes, where the more common ones are played by buttons 1 - 5:</p>
-                <ul>
-                    <li>1: Note 1 (tonic)</li>
-                    <li>2: Note 2 (supertonic)</li>
-                    <li>3: Note 4 (subdominant)</li>
-                    <li>4: Note 5 (dominant)</li>
-                    <li>5: Note 6 (submediant)</li>
-                    <li>A: Note 3 (mediant)</li>
-                    <li>B: Note 7 (leading note)</li>
-                </ul>
-                <p>Pressing a button triggers the note and will keep it playing. Pressing the same button again will stop the note playing. Pressing a different button 1 - 5 or A - B will stop the current note playing and play the new selected note.</p>
-                <p>The left (&#x25C0;) and right (&#x25B6;) buttons change the octave, with the initial octave being 3 (i.e. C3 and up). The minimum octave is 0 and the maximum is 6.</p>
-                <p>The up (&#x25B2;) and down (&#x25BC;) buttons change the key. These buttons cycle round the 12 chromatic notes, with C the default key.</p>
-                <p>The C button toggles between major and the relative minor key.</p>
-            </article>
-        </section>
         <script>
             const config = {
     // set some defaults
@@ -522,46 +477,60 @@
         "defaultLedColor": [0,255,0],
         "defaultScreenForeColor": [0,255,0]
     },
+    // the mode the unit first loads
+    "selectMode": {
+        // this built-in mode allows the user to select a different mode
+        "name": "ModeSelect",
+        "title": "Select mode...",
+        "modeType": "BuiltIn",
+        "actions": [
+            {
+                // press button A to go up a mode
+                "buttonId": 'a',
+                // define what will appear on the screen for this button
+                "screenText": "&#x25C0;",
+                "onPress": [
+                    {
+                        "actionType": "ModeDown"
+                    }
+                ]
+            },{
+                // press button B to go down a mode
+                "buttonId": 'b',
+                "screenText": "&#x25B6;",
+                "onPress": [
+                    {
+                        "actionType": "ModeUp"
+                    }
+                ]
+            },{
+                // press button C to choose the selected mode
+                "buttonId": 'c',
+                "screenText": "OK",
+                "onPress": [
+                    {
+                        "actionType": "ChooseMode"
+                    }
+                ]
+            },{
+                "buttonId": '1-2',
+                "onPress": [
+                    {
+                        "actionType": "ChangeMode",
+                        "parameters": {
+                            "toMode": "ModeSelect"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
     // the unit has built-in modes, and custom modes the user can define
     "modes": [
         {
-            // this built-in mode allows the user to select a different mode
-            "name": "ModeSelect",
-            "modeType": "BuiltIn",
-            "actions": [
-                {
-                    // press button 1 to go up a mode
-                    "buttons": [1],
-                    // define what will appear on the screen for this button
-                    "screenText": ">",
-                    "onPress": [
-                        {
-                            "actionType": "ModeUp"
-                        }
-                    ]
-                },{
-                    // press button 2 to go down a mode
-                    "buttons": [2],
-                    "screenText": "<",
-                    "onPress": [
-                        {
-                            "actionType": "ModeDown"
-                        }
-                    ]
-                },{
-                    // press button 3 to choose the selected mode
-                    "buttons": [3],
-                    "screenText": "OK",
-                    "onPress": [
-                        {
-                            "actionType": "ChooseMode"
-                        }
-                    ]
-                }
-            ]
-        },{
             // this custom mode sends MIDI notes
             "name": "Notes",
+            "title": "Note mode",
             // this description will appear on the screen when cycling through the modes
             "description": "Send MIDI notes",
             "modeType": "Custom",
@@ -574,9 +543,9 @@
             "actions": [
                 {
                     // press button 1 to send a MIDI note message
-                    "buttons": [1],
+                    "buttonId": '1',
                     // show something on the screen for this button
-                    "screenText": "F#", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    "screenText": "C", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
                     // the default mode for the button is momentary, or we can set it to "latched"
                     "mode": "momentary",
                     // automatically light the LED when this button is pressed and turn the LED off when the button is released
@@ -601,8 +570,91 @@
                         // we trigger other events here as well
                     ]
                 },{
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '2',
+                    // show something on the screen for this button
+                    "screenText": "F", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                        // we trigger other events here as well
+                    ]
+                },{
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '3',
+                    // show something on the screen for this button
+                    "screenText": "G", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                        // we trigger other events here as well
+                    ]
+                },{
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '4',
+                    // show something on the screen for this button
+                    "screenText": "A", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                    ]
+                },{
                     // this button changes the octave up
-                    "buttons": [3],
+                    "buttonId": 'a',
                     "screenText": "Octv UP",
                     "onPress": [
                         {
@@ -615,7 +667,7 @@
                     ]
                 },{
                     // and this changes the octave down
-                    "buttons": [3],
+                    "buttonId": 'b',
                     "screenText": "Octv DN",
                     "onPress": [
                         {
@@ -626,8 +678,20 @@
                         }
                     ]
                 },{
-                    // when pressing buttons 1 and 2 together
-                    "buttons": [1,2],
+                    // and this resets the octave
+                    "buttonId": 'c',
+                    "screenText": "Octv RST",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeOctave",
+                            "parameters": {
+                                "direction": "Default"
+                            }
+                        }
+                    ]
+                },{
+                    // when pressing buttons 1 and 2 together - this is applied to all modes
+                    "buttonId": '1-2',
                     // we don't show anything on the screen for this combination
                     // basically because I haven't worked out how to do that
                     "onPress": [
@@ -643,16 +707,136 @@
                 }
                 // we could add actions to the other buttons, like change key up or down, change octave etc
             ]
+        },{
+            "name": "SET1",
+            "title": "Set 1 FX",
+            "description": "Effects for set 1",
+            "modeType": "Custom",
+            // set some optional defaults for this mode
+            "defaults": {
+                "key": "C major",
+                "octave": 3
+            },
+            "actions": [
+                {
+                    "buttonId": '1',
+                    "screenText": "Rvb",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '2',
+                    "screenText": "Dly",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '3',
+                    "screenText": "Phs",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '4',
+                    "screenText": "Ovd",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": 'a',
+                    "screenText": "&#x25C0;",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeBank",
+                            "parameters": {
+                                "direction": "Up"
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": 'b',
+                    "screenText": "&#x25B6;",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeBank",
+                            "parameters": {
+                                "direction": "Down"
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": 'c',
+                    "screenText": "TUNER",
+                    "mode": "latched",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeBank",
+                            "parameters": {
+                                "direction": "Down"
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '1-2',
+                    "onPress": [
+                        {
+                            "actionType": "ChangeMode",
+                            "parameters": {
+                                "toMode": "ModeSelect"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
 
             const body = document.querySelector('body'),
+                // how many buttons on the board
                 numberOfButtons = 7,
+                // how the buttons are laid out on the board, translates to areas on the screen
                 buttonLayout = [
-                    [1,2,3],
-                    [4,5,6,7]
+                    ['a','b','c'],
+                    ['1','2','3','4']
                 ],
+                // array of key signatures
                 keys = [
                     {
                         'index': 0,
@@ -716,52 +900,199 @@
                     }
                 ];
             let currentConfig = {},
-                currentMode = 'ModeSelect',
+
+                // data about the current mode
+                currentModeName = 'ModeSelect',
+                currentModeIndex = -1,
+                currentMode = null,
+                currentModeButtons = {},
+
+                // data about the selected mode, used when changing mode
+                selectedModeIndex = 0,
+                selectedModeName = null,
+
+                // data about the current musical context
                 currentMajorMinorMode = 'major',
                 currentKeyIndex = 0,
                 currentOctave = 3,
                 activeButtons = [];
 
-            const footSwitches = document.querySelectorAll('.foot-switch'),
+            const buttons = document.querySelectorAll('button'),
                 screen = document.getElementById('screen');
 
-            footSwitches.forEach((el) => {
-                el.addEventListener('mousedown', function(){ handleClick(el); });
-            });
-
             function initialise(config) {
+                if (!config) {
+                    renderError("Bad config!");
+                    return;
+                }
+
                 currentConfig = config;
-                currentMode = 'ModeSelect';
+
+                // data about the selected mode, used when changing mode
+                selectedModeIndex = 0;
+                selectedModeName = null;
+
+                // data about the current musical context
                 currentMajorMinorMode = 'major';
                 currentKeyIndex = 0;
                 currentOctave = 3;
                 activeButtons = [];
-            }
+                
+                initialiseSelectMode();
 
-            function handleClick(el) {                
-                getButtonActions()
+                // in the real code this is handled by a loop and monitoring the voltage for each button
+                buttons.forEach((el) => {
+                    el.addEventListener('mousedown', function(){ handleClick(el); });
+                });
 
                 renderScreen();
             }
 
-            function toggleMode() {
-                currentMode = currentMode === 'note' ? 'chord' : 'note';
-                if (currentMode === 'chord') {
-                    setCurrentChordSpread('a');
+            function initialiseSelectMode() {
+                currentMode = currentConfig.selectMode;
+                currentModeName = currentMode.name;
+                currentModeIndex = -1;
+                getModeActions();
+            }
+
+            function getMode() {
+                const foundModes = currentConfig.modes.filter((mode) => {
+                    return mode.name === currentModeName;
+                });
+                if (!foundModes || foundModes.length !== 1) {
+                    renderError(`Could not find mode with name '${currentModeName}'`);
+                }
+                currentMode = foundModes[0];
+                currentModeName = currentMode.name;
+                getModeActions();
+            }
+
+            function getModeActions() {
+                currentModeButtons = [];
+                currentMode.actions.forEach((act) => {
+                    currentModeButtons[act.buttonId] = act;
+                });
+            }
+
+            // generic button handling
+
+            // handle a click on a button
+            function handleClick(el) {
+                const buttonId = el.dataset.buttonId;
+                if (!buttonId) {
+                    renderError("The clicked element is not a valid button");
+                    return;
+                }
+                const button = getButton(buttonId);
+                if (!button) {
+                    renderError("Unable to load button actions");
+                    return;
+                }
+                executeButtonActions(button);
+            }
+
+            // execute the actions for a button, in the order they appear in the config
+            function executeButtonActions(button) {
+                button.onPress.forEach((act) => {
+                    switch (act.actionType) {
+                        case 'ModeDown':
+                            highlightButton(button);
+                            doModeDown(button);
+                            break;
+                        case 'ModeUp':
+                            highlightButton(button);
+                            doModeUp(button);
+                            break;
+                        case 'ChooseMode':
+                            highlightButton(button);
+                            doChooseMode(button);
+                            break;
+                        case 'ChangeMode':
+                            initialiseSelectMode();
+                            renderScreen();
+                            break;
+                        default:
+                            //renderError("Unsupported action");
+                            highlightButton(button);
+                    }
+                });
+            }
+
+            // get a single button from the current mode by ID
+            function getButton(buttonId) {
+                const action = currentMode.actions.filter((act) => {
+                    return act.buttonId === buttonId;
+                });
+                return !action ? null : action[0];
+            }
+
+            // select mode methods
+
+            function doModeDown() {
+                if (selectedModeIndex < 0) {
+                    selectedModeIndex = 0;
+                }
+                if (selectedModeIndex === 0) {
+                    selectedModeIndex = currentConfig.modes.length - 1;
                 } else {
-                    setCurrentChordSpread(null);
+                    selectedModeIndex = selectedModeIndex - 1;
+                }
+                const newMode = currentConfig.modes[selectedModeIndex];
+                selectedModeName = newMode.name;
+                document.getElementById('title').innerHTML = newMode.title;
+            }
+
+            function doModeUp() {
+                if (selectedModeIndex < 0) {
+                    selectedModeIndex = 0;
+                }
+                if (selectedModeIndex ===  currentConfig.modes.length - 1) {
+                    selectedModeIndex = 0;
+                } else {
+                    selectedModeIndex = selectedModeIndex + 1;
+                }
+                const newMode = currentConfig.modes[selectedModeIndex];
+                selectedModeName = newMode.name;
+                document.getElementById('title').innerHTML = newMode.title;
+            }
+
+            function doChooseMode() {
+                currentMode = currentConfig.modes[selectedModeIndex];
+                currentModeName = currentMode.name;
+                currentModeIndex = selectedModeIndex;
+                getModeActions();
+                renderScreen();
+            }
+
+            // screen render methods
+
+            function renderError(msg) {
+                screen.innerHTML = `<p>${msg}</p>`;
+            }
+
+            // highlight the button
+            function highlightButton(button) {
+                const screenButtonEl = document.getElementById(`screen-button-${button.buttonId}`),
+                    buttonEl = document.getElementById(`button-${button.buttonId}`);
+                if (!screenButtonEl && !buttonEl) {
+                    return;
+                }
+                if (button.mode === 'latched') {
+                    screenButtonEl.classList.toggle('active');
+                    buttonEl.classList.toggle('active');
+                } else {
+                    screenButtonEl.classList.add('active');
+                    buttonEl.classList.add('active');
+                    buttonEl.addEventListener('mouseup', function(){
+                        screenButtonEl.classList.remove('active');
+                        buttonEl.classList.remove('active');
+                    });
                 }
             }
 
-            function toggleChord(el) {
-                setCurrentChordIndex(parseInt(el.id) - 1);
-            }
+            // built-in actions
 
-            function toggleChordSpread(el) {
-                setCurrentChordSpread(el.id);
-            }
-
-            function toggleOctave(direction, id) {
+            function changeOctave(direction, id) {
                 // go down an octave
                 if (direction === 'down' && currentOctave > 0) {
                     currentOctave = currentOctave - 1;
@@ -770,13 +1101,12 @@
                 if (direction === 'up' && currentOctave < 6) {
                     currentOctave = currentOctave + 1;
                 }
-                activateButton('single', false, 'letter', id);
             }
 
-            function toggleNote(el) {
-                activateButton('exclusive', true, 'number', el.id);
-                let ix = parseInt(el.dataset.noteIndex);
-                setCurrentNoteIndex(ix);
+            function toggleMajorMinor(id) {
+                currentMajorMinorMode = currentMajorMinorMode === 'major' ? 'minor' : 'major';
+                activateButton('single', false, 'letter', id);
+                setCurrentKey();
             }
 
             function activateButton(mode, latch, type, id) {
@@ -810,125 +1140,42 @@
                 }
             }
 
-            function toggleMajorMinor(id) {
-                currentMajorMinorMode = currentMajorMinorMode === 'major' ? 'minor' : 'major';
-                activateButton('single', false, 'letter', id);
-                setCurrentKey();
-            }
-
             function renderScreen() {
-                if (currentMode === 'chord') {
-                    renderChordScreen();
-                }
-                if (currentMode === 'note') {
-                    renderNoteScreen();
-                }
-            }
-
-            function renderChordScreen() {
-                let key = currentKeyName,
-                    chord = '',
-                    spread = '';
-                if (currentChordIndex !== null) {
-                    let chordName = getChord();
-                    chord = `<h2>Chord: ${chordName}</h2>`;
-                }
-                screen.innerHTML = `
-                <h1>Chord mode</h1>
-                <h2>Key: ${key}</h2>
-                <h2>Octave: ${currentOctave}</h2>
-                <h2>Spread: ${currentChordSpread}</h2>
-                ${chord}
-                `;
-            }
-
-            function renderNoteScreen() {
-                let key = currentKeyName,
-                    note = '&nbsp;',
-                    notes = currentMajorMinorMode === 'major' ? currentKey.majorNotes : currentKey.minorNotes;
-                if (currentNoteIndex !== null) {
-                    let noteName = getNote();
-                    note = `Note: ${noteName}`;
-                }
-                const screenConfig = {
-                    'title': 'Note mode',
-                    'rows': [
-                        [`<h2>Key: ${key}</h2>`, `<h2>Octave: ${currentOctave}</h2>`],
-                        [`<p>${note}</p>`, `<p></p>`]
-                    ],
-                    'buttons': {
-                        'a': 'Maj/Min',
-                        'b': '&#x25C0; Oct',
-                        'c': 'Oct &#x25B6;',
-                        '1': notes[0],
-                        '2': notes[1],
-                        '3': notes[2],
-                        '4': notes[3]
-                    }
-                };
-                updateScreen('play', screenConfig);
-            }
-
-            function updateScreen(mode, screenConfig) {
-                currentScreenMode = mode;
-                currentScreenConfig = screenConfig;
-                drawScreen();
-            }
-
-            function drawScreen() {
                 let html = '';
-                if (currentScreenMode === 'play') {
-                    html += `<h1 class="one-col">${currentScreenConfig.title}</h1>`;
-                    currentScreenConfig.rows.forEach((rows) => {
-                        if (rows.length === 1) {
-                            html += '<div class="one-col">';
-                        } else if (rows.length === 2) {
-                            html += '<div class="two-col">';
-                        } else if (rows.length === 3) {
-                            html += '<div class="three-col">';
-                        } else if (rows.length === 1) {
-                            html += '<div class="four-col">';
+                html += `<h1 class="one-col" id="title">${currentMode.title}</h1>`;
+                buttonLayout.forEach((row) => {
+                    let layoutClass = 'four-col buttons';
+                    if (row.length === 3) {
+                        layoutClass = 'three-col buttons';
+                    }
+                    html += `<div class="${layoutClass}">`;
+                    row.forEach((buttonId) => {
+                        const button = getButton(buttonId);
+                        if (button) {
+                            html += `<p class="outline" id="screen-button-${buttonId}">${button.screenText}</p>`;
                         }
-                        rows.forEach((item) => {
-                            html += item;
-                        });
-                        html += '</div>';
                     });
-                    html += `
-                    <div class="three-col buttons">
-                        <p class="outline screen-letter-button${activeButtons.letter.includes('button-a') ? ' active' : ''}" id="screen-button-a">${currentScreenConfig.buttons.a}</p>
-                        <p class="outline screen-letter-button${activeButtons.letter.includes('button-b') ? ' active' : ''}" id="screen-button-b">${currentScreenConfig.buttons.b}</p>
-                        <p class="outline screen-letter-button${activeButtons.letter.includes('button-c') ? ' active' : ''}" id="screen-button-c">${currentScreenConfig.buttons.c}</p>
-                    </div>
-                    <div class="four-col buttons">
-                        <p class="outline screen-number-button${activeButtons.number.includes('button-1') ? ' active' : ''}" id="screen-button-1">${currentScreenConfig.buttons['1']}</p>
-                        <p class="outline screen-number-button${activeButtons.number.includes('button-2') ? ' active' : ''}" id="screen-button-2">${currentScreenConfig.buttons['2']}</p>
-                        <p class="outline screen-number-button${activeButtons.number.includes('button-3') ? ' active' : ''}" id="screen-button-3">${currentScreenConfig.buttons['3']}</p>
-                        <p class="outline screen-number-button${activeButtons.number.includes('button-4') ? ' active' : ''}" id="screen-button-4">${currentScreenConfig.buttons['4']}</p>
-                    </div>
-                    `;
-                }
+                    html += '</div>';
+                });
+                /*
+                html += `
+                <div class="three-col buttons">
+                    <p class="outline screen-letter-button${activeButtons.letter.includes('button-a') ? ' active' : ''}" id="screen-button-a">${currentScreenConfig.buttons.a}</p>
+                    <p class="outline screen-letter-button${activeButtons.letter.includes('button-b') ? ' active' : ''}" id="screen-button-b">${currentScreenConfig.buttons.b}</p>
+                    <p class="outline screen-letter-button${activeButtons.letter.includes('button-c') ? ' active' : ''}" id="screen-button-c">${currentScreenConfig.buttons.c}</p>
+                </div>
+                <div class="four-col buttons">
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-1') ? ' active' : ''}" id="screen-button-1">${currentScreenConfig.buttons['1']}</p>
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-2') ? ' active' : ''}" id="screen-button-2">${currentScreenConfig.buttons['2']}</p>
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-3') ? ' active' : ''}" id="screen-button-3">${currentScreenConfig.buttons['3']}</p>
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-4') ? ' active' : ''}" id="screen-button-4">${currentScreenConfig.buttons['4']}</p>
+                </div>
+                `;
+                */
                 screen.innerHTML = html;
             }
 
-            function getChord() {
-                let key = getChords();
-                return key[currentChordIndex];
-            }
-
-            function getNote() {
-                let key = getNotes();
-                return key[currentNoteIndex].trimEnd('m');
-            }
-
-            function getKey() {
-                return keys.find(obj => {
-                    return obj.index === currentKeyIndex;
-                });
-            }
-
             initialise(config);
-            renderScreen();
 
             // Functions for the page, not the unit
 
