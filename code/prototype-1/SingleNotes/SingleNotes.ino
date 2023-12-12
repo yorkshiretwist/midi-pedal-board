@@ -1,4 +1,4 @@
-// run this to use the unit in cord mode
+// run this to use the unit in chord mode
 // remember to set the USB type to "Serial + MIDI"
 
 // include the debounce library
