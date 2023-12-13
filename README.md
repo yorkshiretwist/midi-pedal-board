@@ -55,6 +55,3 @@ Before I started physically building anything I made a pure software prototype. 
 `config-example.json` is the example config file, in JSON format. This config would define what the buttons do - making the unit a platform which could do pretty much anything the user wanted it to. While a nerd like me could edit configs like this by hand, if anyone else were to use this a GUI to edit the file would be necessary. I imagine something like the Blackstar Live Logic app:
 
 ![Screenshot of the Blackstar Live Logic editor app](research/blackstar-live-logic-app.jpg)
-
-## Parts
-
