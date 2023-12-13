@@ -9,9 +9,15 @@
 
 class Note {
   public:
+    // the name of this note, including the octave e.g.C3
     String Name;
+    // the octave for this notes
     int Octave;
+    // the MIDI note number
     int MidiNoteNumber;
+    // the MIDI channel this note is playing on, used when stopping notes after changing channels
+    int MidiPlayingChannel;
+    // constructor
     Note(const String nameParam, int octaveParam, int midiNoteNumberParam) {
       Name = nameParam;
       Octave = octaveParam;

@@ -1,0 +1,233 @@
+{
+    "buttons": [{
+        "index": 0,
+        "name": "Button 1",
+        "keys": [{
+            "name": "C",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low C octave",
+                "notes": ["C1", "C2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "C",
+                "notes": ["C2", "C3", "E3", "G3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "C2",
+                "notes": ["C2", "C3", "G3", "D4", "E4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High C5",
+                "notes": ["C5", "G5", "C6"]
+            }]
+        },{
+            "name": "G",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low G octave",
+                "notes": ["G1", "G2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "G",
+                "notes": ["G2", "G3", "B3", "D4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "G2",
+                "notes": ["G1", "B2", "A3", "D4", "G4", "D5"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High G5",
+                "notes": ["G4", "G5", "D6"]
+            }]
+        }]
+    },{
+        "index": 1,
+        "name": "Button 2",
+        "keys": [{
+            "name": "C",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low D octave",
+                "notes": ["D1", "D2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Dm7",
+                "notes": ["D2", "D3", "F3", "A3", "C4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Dm9",
+                "notes": ["D3", "D4", "A4", "C4", "F4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Dm5",
+                "notes": ["D5", "A5", "D6"]
+            }]
+        },{
+            "name": "G",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low A octave",
+                "notes": ["A1", "A2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Am7",
+                "notes": ["A2", "A3", "C3", "E4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Am9",
+                "notes": ["A1", "C3", "B4", "E4", "G4", "A4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Am5",
+                "notes": ["A4", "A5", "E6"]
+            }]
+        }]
+    },{
+        "index": 2,
+        "name": "Button 3",
+        "keys": [{
+            "name": "C",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low F octave",
+                "notes": ["F1", "F2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "F",
+                "notes": ["F2", "F3", "C4", "A4", "C4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "F2",
+                "notes": ["F2", "F3", "C3", "G3", "A3"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High F5",
+                "notes": ["F5", "C5", "F6"]
+            }]
+        },{
+            "name": "G",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low C octave",
+                "notes": ["C1", "C2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "C",
+                "notes": ["C2", "C3", "G3", "E4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "C2",
+                "notes": ["C2", "C3", "G3", "D4", "E4", "G4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High C5",
+                "notes": ["C5", "G5", "C6"]
+            }]
+        }]
+    },{
+        "index": 3,
+        "name": "Button 4",
+        "keys": [{
+            "name": "C",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low G octave",
+                "notes": ["G1", "G2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "G",
+                "notes": ["G2", "G3", "D4", "B4", "D4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "G2",
+                "notes": ["G2", "G3", "D4", "G4", "A4", "B4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High G5",
+                "notes": ["G5", "D5", "G6"]
+            }]
+        },{
+            "name": "G",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low D octave",
+                "notes": ["D1", "D2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "D",
+                "notes": ["D2", "D3", "F#4", "A4", "D5"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "D2",
+                "notes": ["D2", "D3", "E4", "F#4", "A4", "D5"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High D5",
+                "notes": ["D4", "D5", "A5"]
+            }]
+        }]
+    },{
+        "index": 4,
+        "name": "Button 5",
+        "keys": [{
+            "name": "C",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low A octave",
+                "notes": ["A1", "A2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Am7",
+                "notes": ["A2", "A3", "E4", "G4", "C4", "E4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Am9",
+                "notes": ["A2", "A3", "E3", "G3", "B3", "C4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High A5",
+                "notes": ["A5", "E5", "A6"]
+            }]
+        },{
+            "name": "G",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low E octave",
+                "notes": ["E1", "E2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Em7",
+                "notes": ["E2", "E3", "D4", "G4", "B4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Em9",
+                "notes": ["E2", "E3", "D4", "F#4", "G4", "B4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Em5",
+                "notes": ["E4", "E5", "B5"]
+            }]
+        }]
+    }]
+}
