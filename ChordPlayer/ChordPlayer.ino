@@ -86,41 +86,47 @@ int previousModeIndex = -1;
 // flag to say if we are changing MIDI channel
 bool changingMidiChannel = false;
 
+// the enabled MIDI channels
+std::vector<int> midiChannels;
+
 // the MIDI channel number to send messages
-int midiChannel = 1;
+int currentMidiChannelIndex = 0;
 
 // the previous MIDI channel
-int previousMidiChannel = -1;
+int previousMidiChannelIndex = -1;
 
 // the names to show for each MIDI channel - these correspond to the patches in the DAW
-const String channelNames[3] = {"Simple Pad", "Big Pad", "Piano"};
+std::vector<String> midiChannelNames;
 
 // the array of keys
-const String keys[12] = {"Gb", "Db", "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B"};
+std::vector<String> keys;
 
 // flag to indicate if we are changing key
 bool changingKey = false;
 
 // current key index
-int currentKeyIndex = 6;
+int currentKeyIndex = 0;
 
 // previous key index
 int previousKeyIndex = -1;
 
 // the array of registers
-const String registers[4] = { "Low", "Middle", "Wide", "High" };
+std::vector<String> registers;
 
 // flag to indicate if we are changing register
 bool changingRegister = false;
 
 // current register index
-int currentRegisterIndex = 1;
+int currentRegisterIndex = 0;
 
 // previous register index
 int previousRegisterIndex = -1;
 
 // set the default spread, which is to play all notes at the same time
 String spread = "Normal";
+
+// if the unit is ready for playing
+bool initialised = false;
 
 // ============================================================================
 // screen functions
@@ -169,7 +175,7 @@ void display(String errorMessage) {
   }
 
   tft.setTextSize(3);
-  tft.println("[Ch " + (String)midiChannel + "] " + channelNames[midiChannel - 1]);
+  tft.println("[Ch " + (String)midiChannels[currentMidiChannelIndex] + "] " + midiChannelNames[currentMidiChannelIndex]);
   blankLine(1);
   
   tft.setTextSize(3);
@@ -183,7 +189,35 @@ void displayWelcome() {
   tft.setTextSize(3);
   tft.println("Starting up...");
   delay(1500);
-  display();
+
+  // display the values from the config
+
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextSize(2);
+
+  tft.println("CONFIG");
+  tft.println("MIDI channels:");
+  String midiChannelString = "";
+  for(int x = 0; x < (int)midiChannels.size(); x++) {
+    midiChannelString += (String)midiChannels[x] + ", ";
+  }
+  tft.println(midiChannelString.substring(0, midiChannelString.length() - 2));
+
+  tft.println("Keys:");
+  String keyString = "";
+  for(int x = 0; x < (int)keys.size(); x++) {
+    keyString += keys[x] + ", ";
+  }
+  tft.println(keyString.substring(0, keyString.length() - 2));
+
+  tft.println("Registers:");
+  String registerString = "";
+  for(int x = 0; x < (int)registers.size(); x++) {
+    registerString +=  registers[x] +", ";
+  }
+  tft.println(registerString.substring(0, registerString.length() - 2));
+
+  tft.println("Press any button to start");
 }
 
 // ============================================================================
@@ -194,6 +228,45 @@ void readJson() {
   File dataFile = SD.open("config.json");
   jsonError = deserializeJson(jsonDoc, dataFile);
   dataFile.close();
+
+  // if the config file could be read OK then populate the values
+  if (jsonError == DeserializationError::Ok) {
+
+    // get the keys
+    JsonArray configKeys = jsonDoc["keys"].as<JsonArray>();
+    String currentKeyName = jsonDoc["defaults"]["key"].as<String>();
+    int keyIndex = 0;
+    for (JsonVariant configKey : configKeys) {
+      String keyName = configKey.as<String>();
+      keys.push_back(keyName);
+      if (currentKeyName.compareTo(keyName) == 0) {
+        currentKeyIndex = keyIndex;
+      }
+      keyIndex++;
+    }
+    
+    // get the registers
+    JsonArray configRegisters = jsonDoc["registers"].as<JsonArray>();
+    String currentRegisterName = jsonDoc["defaults"]["register"].as<String>();
+    int registerIndex = 0;
+    for (JsonVariant configRegister : configRegisters) {
+      String registerName = configRegister.as<String>();
+      registers.push_back(registerName);
+      if (currentRegisterName.compareTo(registerName) == 0) {
+        currentRegisterIndex = registerIndex;
+      }
+      registerIndex++;
+    }
+
+    // get the MIDI channels
+    JsonArray configMidiChannels = jsonDoc["midiChannels"].as<JsonArray>();
+    currentMidiChannelIndex = jsonDoc["defaults"]["midiChannel"].as<int>() - 1;
+    for (JsonObject configMidiChannel : configMidiChannels) {
+      midiChannelNames.push_back(configMidiChannel["name"].as<String>());
+      midiChannels.push_back(configMidiChannel["channelNumber"].as<int>());
+    }
+
+  }
 }
 
 // print the error if the JSON file could not be read
@@ -299,34 +372,34 @@ void changeMode() {
 // go to the next MIDI channel up, or back to the bottom
 void midiChannelUp() {
   changingMidiChannel = true;
-  previousMidiChannel = midiChannel;
-  midiChannel = midiChannel + 1;
-  if (midiChannel == 17) {
-    midiChannel = 1;
+  previousMidiChannelIndex = currentMidiChannelIndex;
+  currentMidiChannelIndex = currentMidiChannelIndex + 1;
+  if (currentMidiChannelIndex == (int)midiChannels.size()) {
+    currentMidiChannelIndex = 0;
   }
-  print("Changing MIDI channel up from " + (String)previousMidiChannel + " to " + (String)midiChannel);
+  print("Changing MIDI channel up from " + (String)midiChannels[previousMidiChannelIndex] + " to " + (String)midiChannels[currentMidiChannelIndex]);
 }
 
 // go to the next MIDI channel down, or back to the top
 void midiChannelDown() {
   changingMidiChannel = true;
-  previousMidiChannel = midiChannel;
-  midiChannel = midiChannel - 1;
-  if (midiChannel == 0) {
-   midiChannel = 16;
+  previousMidiChannelIndex = currentMidiChannelIndex;
+  currentMidiChannelIndex = currentMidiChannelIndex - 1;
+  if (currentMidiChannelIndex == -1) {
+   currentMidiChannelIndex = (int)midiChannels.size() - 1;
   }
-  print("Changing MIDI channel up from " + (String)previousMidiChannel + " to " + (String)midiChannel);
+  print("Changing MIDI channel down from " + (String)midiChannels[previousMidiChannelIndex] + " to " + (String)midiChannels[currentMidiChannelIndex]);
 }
 
 // start  playing the given note
 void playNote(Note note) {
-  print(" Playing " + note.Name + ", MIDI note " + (String)note.MidiNoteNumber + ", channel " + (String)midiChannel);
+  print(" Playing " + note.Name + ", MIDI note " + (String)note.MidiNoteNumber + ", channel " + (String)midiChannels[currentMidiChannelIndex]);
   // set the MIDI channel this note is playing on
-  note.MidiPlayingChannel = midiChannel;
+  note.MidiPlayingChannel = midiChannels[currentMidiChannelIndex];
   // add it to the array of playing notes
   currentPlayingNotes.push_back(note);
   // play the note on the current MIDI channel
-  usbMIDI.sendNoteOn(note.MidiNoteNumber, 99, midiChannel);
+  usbMIDI.sendNoteOn(note.MidiNoteNumber, 99, midiChannels[currentMidiChannelIndex]);
 }
 
 // stop playing the given note
@@ -344,7 +417,7 @@ void keyUp() {
   previousKeyIndex = currentKeyIndex;
   changingKey = true;
   currentKeyIndex = currentKeyIndex + 1;
-  if (currentKeyIndex == 12) {
+  if (currentKeyIndex == (int)keys.size()) {
     currentKeyIndex = 0;
   }
   print("Changing key up from " + keys[previousKeyIndex] + " to " + keys[currentKeyIndex]);
@@ -356,7 +429,7 @@ void keyDown() {
   changingKey = true;
   currentKeyIndex = currentKeyIndex - 1;
   if (currentKeyIndex == -1) {
-   currentKeyIndex = 11;
+   currentKeyIndex = (int)keys.size() - 1;
   }
   print("Changing key down from " + keys[previousKeyIndex] + " to " + keys[currentKeyIndex]);
 }
@@ -391,6 +464,13 @@ void registerDown() {
 
 // when a button is triggered
 void triggerButton(int buttonIndex) {
+
+  // if we've not initialised the box yet then do it
+  if (initialised == false) {
+    initialised = true;
+    display();
+    return;
+  }
 
   // ensure we have some JSON config
   checkJson();
@@ -604,30 +684,21 @@ void setup() {
   // read the JSON configuration file
   readJson();
 
+  // cycle through all LEDs
+  for(int x = 0; x < 3; x++) { //(int)sizeof(ledPins)
+    print("Testing LED on pin " + (String)ledPins[x]);
+    digitalWrite(ledPins[x], HIGH);
+    delay(100);
+    digitalWrite(ledPins[x], LOW);
+  }
+
   displayWelcome();
 }
 
 // ============================================================================
 // main loop
 
-bool initialised = false;
-
 void loop() {
-
-  // if this is the first time round the loop, we've not run the initialisation code yet
-  if (!initialised) {
-
-    // cycle through all LEDs
-    for(int x = 0; x < 3; x++) { //(int)sizeof(ledPins)
-      print("Testing LED on pin " + (String)ledPins[x]);
-      digitalWrite(ledPins[x], HIGH);
-      delay(100);
-      digitalWrite(ledPins[x], LOW);
-    }
-
-    // now we're initialised
-    initialised = true;
-  }
 
   // Update all the buttons.  There should not be any long
   // delays in loop(), so this runs repetitively at a rate

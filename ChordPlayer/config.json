@@ -1,4 +1,24 @@
 {
+    "keys": ["F", "C", "G", "D", "A", "E"],
+    "registers": ["Low", "Middle", "Wide", "High"],
+    "midiChannels": [{
+        "channelNumber": 1,
+        "name": "Simple pad"
+    },{
+        "channelNumber": 2,
+        "name": "Big pad"
+    },{
+        "channelNumber": 3,
+        "name": "Piano pad"
+    },{
+        "channelNumber": 4,
+        "name": "Strings"
+    }],
+    "defaults": {
+        "key": "C",
+        "register": "Middle",
+        "midiChannel": 1
+    },
     "buttons": [{
         "index": 0,
         "name": "Button 1",
