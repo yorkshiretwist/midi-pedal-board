@@ -1,0 +1,1252 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>MIDI Pedal Board</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100&display=swap" rel="stylesheet"> 
+        <style>
+            /* If the unit is 300mm wide and shown at 90% of the viewport width, sort out the scale */
+            :root {
+                --unit-width: 300;
+                --unit-height: 200;
+                --screen-width: 55;
+                --screen-height: 77;
+                --button-size: 10;
+                --button-width-gap: calc(57 * var(--scale));
+                --button-height-gap: calc(65 * var(--scale));
+                --unit-viewport-width: 80vw;
+                --scale: 0.20vw;
+                --top-row: 3;
+                --middle-row: 5;
+                --bottom-row: 7;
+            }
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                display: grid;
+                justify-content: center;
+                justify-items: center;
+                width: 100vw;
+                height: 100vh;
+                grid-template-columns: 80vw 20vw;
+                background-color: rgb(101, 104, 95);
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAATq0lEQVRoQ02aBaws1dKFe3qzmWbgEh4WJHjycAjuQYM/LEBwdw/BCR7cgz/DIcHdNVjw4BY0QRI0yDBD0837vkrP/f9Jbs45M9N776patWpV7du76qqr8pprrln9+uuvo6Io8ltvvdW+9957+dNPPx1us802xQ033DDYZJNNRsstt1zed999i6+//rrYdNNN6/vuuy/feOON7UsvvZSPOuqoYoEFFqhvu+225o033qjuuuuuZs455yyOPfbY9tprry2++uqr5p///GfB96rHH3985J5HHHFEy37FAQccUJ999tn9ffbZp/jHP/7hd4u55pqr4Pn02Wef1auttlp5zz331F9++WXl9++88856lVVWafz9p59+qno8PGXbbbetx+NxXnjhhYccsO8iv/zyS8smjZuNRqO0+uqrF/w+Ov7446sZZpihvvjii/P+++/fLL/88unNN9+sn3zyyWLrrbduvv/++zTLLLO4Qb733nuLk08+uX766aerv//97w3r1hw044w4kIb/5z//KWpea6+9dsn6tYe65ZZbRksvvXQ166yzFpyvPuWUU8pXX321WHTRRRNnbXQkr3rdddeteiw2mDJlSqsn+v3+4LnnnisOO+ywho0LN+JfwQOZCCUPcfTRR6frrrtOL1a878/i1ltvbd99991MZEoMGnOwwRprrNHwvfG3336bTzrppILnS9f8/PPP03zzzTfS0KWWWiqfc845xZ577qnXhzilv+qqq7ZErvSErJ/++usvo94QnZqfmcjUrJO/++679plnnsm9q6++upp++ulrNs277bZbgaUl3k5AYoj1Wt6+//77g7POOqt+4YUXsh575513Rhyu4uDNoYceOubfQM8YaiASHmTDRAQaofHxxx9XeHa00korVRtttFHzySefJBxRALXi+eefLzCkxqAGWCaMzbPNNltx+umn+2zCIf6st9pqq0oUnHbaaRo6OOaYY4xo0cPCyhDtuuuu7Zlnntmst9567fXXX983F9Zff/3A2o8//tjiqSzOgUrm+4VeJXLlZpttVuy0007JA4LNhBNKPJqA4BDHmFMN3q8eeuihGkwX++23X95+++31Yv3KK6+UwLPiQMOXX34583npYYlqi4cHPCe0CiBZVlWVjNKGG244+PPPP0fmLdAcaUA2Idu2Tffff39YK970momMlzOR8PDDFVZYwZ8NG5sjyRwxnLfffnt7zTXXFHi+JvE1sDTRgUqFN4f4YMAzI4zNeK1lj4Y9spgXFkaZqNY6SeecccYZJVAZ8/dgpplmCgIwsXFaQJqoZBP+tddeSz0WHsgIO++8c8bzerjBE8mQeki8bKJqTD3//PM34p3fB0BuiOF9cf7/veeBhJKbupmw4DBxCI09+OCD27nnnjsbOV8eEKyPZTy9++KLLzbmHka27FtyvqRzgG+g47HHHov88AU7Vj2+ONDjfHHMeyUeE9v1zTff3OCVaq+99hL7zTfffFPtvffeLl7ILiR0m3kRnYZnEvQ5AibVf//73wLji4UWWmjEobOh32WXXfR4QIP3StZLQuvEE08Majz11FMnOVMCp0SUhtNNN13fvUxajfcfhldSOga3fFb6eQ+vVBhRXnTRRUnIgOfB66+/3iy22GJjk1i2OOGEEzK0NtJQPQw02iWXXDLyw79hoLTiiitKl8Wll16aSbjgeg9N6DObx8HxcNJAiKN+4IEHapgvw1I1hg/MGfeeGCSNPvHEE7V7r7POOjX1pARCY9bsE9WALHWnFEIZ/jb5LFANh25hiRKWaA1rr9crgU5i00J84vkSNklQWM17mTAHJV5yySWlPM/niXoSlEnyj1nHkEeB1Gi81uLB8vDDD486IIVK3ZOIye8a/cMPPyQCHJA2XzT+oIMOEkbp3//+d/3bb7/Vf/vb38oeWJxy5ZVXNjyUTC48Jf6KP/74I80+++xRkfli3/c1RPyy4chNTGYjB4WOYIqkgWxSQqsJdhkBtajeHtoaoefwYhzI8BtRn9E4mUZoSo1AKi277LLNdtttlzSQ9YaXX355JkoNORn1yEh5hh4WVrvvvrsHLgmZcBny3kAY+CWKSpJeJ3CRCfBGtcQSS9QLLrhgJvyN+WBk9J6JykECt3zewkylv1thzz33XPnd3FA2yEgyXkDt7rvvrmC5kCAapsdBg7WiYb2xmCc/KmsQiV598MEHUcV7wCQZChc11CyUyIFa5rCQmNh4rvj9999N8kK8AiHzISSBm3344YfpvPPOC/mgR33JRH4GwyWrPJjP1AkTr7ayW8E1GG9XVuOPPvqoIUpG0QNrRCABaFXAUAJopplmmorDj3xfqEM2ZY9FhE7f1cQsGOtLa1qsbjHjfdiHeLXkRPYX4FSstdZa0mTWq36P9yxG1olMHo2BVgEE89tvv12ef/75LZGtzSnyLeAJbAq86toBMf5uH3nkkdKIKgJJVBXCQAEoHHXyPPPMkyxkQlMI9wjlwJCLScMKBMbPPvvsQIEFTEyekVDQsMUXXzz5vswhJqmoESUhCI7l7Jr8qGCTWkyrsajw6p+Iisyh0HM9oy48FZE77rhjFFCoWzaTGIYYb06or8ZEpc+zoQys9pIBgtJK3PQmchpFGZVWbymU+GI+8sgjG9hCVSorjRF5fRPUIoYn9UCJIRVwKXjGkDce6pBDDimpH0loqJd22GGHVhmh/Ljjjjs82BgFMOBgwkwVWiAZIjlVwX6PdYNm3VsBCHQjJy2qRF52imeDhZTDWgcUKjZQVFn5lMUhnnyQYpWtylKulGkpF88ygbLBCMo2JNeAPFL7N3hROaD8MF9G9A+TvkOlWVjINNKXBVNYYkhNcqp3VKCiovZzaV3VAPaDBKaddlojX4ec1rud8qyUr6o+4GKySF3WheyCGmZlBKc2G1GVCaf8XHIgPVZZ8NzABDZvzA2ZyQJHlBoOaa6YP+qd2v7C9zl0knE6SrUPCSM9A85sqQvZKuzafmaDpYOUEhmvR5NCwk3VGYR+LHMooZUGRCkaEiOABHbz9qmnnirAb4mMSKwRCvGCCy6IXoI8CtbCowMOad1QIpTkTavCVPgJWZNWI2HDmmirQP8vQXu9VrG5+eabZ2mTCI5wRGKfwq4Rpw97MEKlR8QoYZFOa5MHg6IjUyrwfmulVgIrp6HNqeJMFcsGQzyapUsSVNrNjz76aJp55pkbuD9ZaZUDdmwWIgwvcVa0lApENZO0aUSNCLmnGraNjShgRMseA6Fu2+r6rKEDm6gDlnux7AEVcGJ/jjnmsDq3eDq4W2Uq+/D9vpup4xVyJrlw4CzhcdYK2vOg/q3KpZqGwjT0bm6x4qDJqBOFkAQqTfPMOmKf4bo4qvR7JPTQz1DL2RpkM2UztMUWWxSRA2C4tSszD/Q4/WpI2U7WFuRALG4SW3hM0knBIaxJ2GC47FRAi0OjYHNv3uhB4DLuEnCoDjI3gF6FhKmNMg6pFHjAI4qhfYI/rSV0awPWH2mgDrHtnahXaTmkhJTVVeMKLxd6hRA7aQiGsGBZRa0DWB/ehLVsO2MjGx5DjmyumCKMwGslbKyaVmzXUK57+E4DZRsUud3PHBCogIFxq2AT50JaIUdEK3sHiEWJY6EsVL0WORiqHz2xOsjQSYcmdTeFaIDLeOONN84+4INqHwwMptBINZNV2KiJedikIPQjFalNvBRonfGQfMdOrHz44YdVpbGfUwYmG9EPKw1wyKBTpRqsau2b9EZJw5XlriHD8S+xdmk/MODgYtNDqrNDCkiLJEyCJRo2CzkrE4g9G3IbGJPd1o/z2RTpuVaMIwRjQ2dI9tokqtOKaIR+/vnnxFpRd2ySqAXR7EiPHtoc0qhuHlQA50QEhiaxylT4Qhw1dSOLhh6LDvQUOG27WhAaw1K9yCKLqC4Lmhsbi8FktuPnExUplNxswtvI6zGRUk/pWacMAUHlhrKCaIechnYjyVW1ShILp1Hm96losH5I3RrP74keOGPwyJ5Y2S0ZRA7YiIuzLbfcspEWKRq1sOJwLf1uUKN6nyStqQ+2ejVFJMYnJqQQ4iytEzi1ygYbbBDwMUJuxKuWCHSQEwqVKzmXkCXRVyBFQnZQO1SktfXEHDLiMpqw7nrs2mS20TKfzL8Yqzh7kfZuuummkNVizCrpT+c7dmpKYA6d3ESdQ0itkiNHLuSM07zaqkzNiNqhYU4b7B/wbNYR3Qhxsq6ThTHd24CDjoStiQ2LtdSLEvhGwTNfdIKYV/8YJSZ2Tj3iDFHIVJJSl8Jsjz32UGtPmvfg7q7QuEhM3fCWdBeFRy+oOmUMBwI2QoZerKvxJ/2yTMf3oveFrfpGiKhXNiUkcwyyjKyVfpIfdoo6xv3x/JiJRJ/a0BpBoi8C6h5fGKgE8UJttdWDah1lL5SmYCplI0LaF88mnKc29HpZKS5+neVYCP3M5/0uXsoUIhVq6HujQV4NjK7VWAktJJQbKM4YLpN7iQjW5o0v57YYH3LE5ka6droB2WTlhA2NSjEr6ICDjY01IRa97LLLYoIm5sD+gN+b7hCViedB3MRENrT2D7BQ7czSiimWgUhtEYSuTd5WQmAti5uHi0PacyPUHKxF9GQ2C+lkjmSdYEoe03KfpR7FvBVWyj0KVuXIgs2idGuAUzmsa5jpRIem1zsoBfsQ7qTHLDjUCRNadVjaqLCxQy8hNp54SYJwdkoUQ4nKSEa6G7kUsNjY3tmBmsWTvx0cCNHITaNhi6ujgViLrsoSjkO1SUtZOuViI0NbOPPHCCWtLaAaqdBAB1k21RMjlN2E3NlnsoDZ0amtwPjIYSxGWqDGNibKEHHbsUoMqqwzJreDZVtPewGp1o7Lz4WoP+1TZCT2njr6nNpS4ilFWWbWHlpbOUCy1AceeGAmoW2w1fMx67Q2GHLFnod3YItHw0jYrOlGLrJItI3OVY2oh+umzzpg7Bjd5FRX4cnaPDOBfUaYWHN0jO8xeoxpnwr1wQcfDBbq+u5gyx60OEU+li4tFC7IKF39bSfWJ7GjmbACqn3sGSxSHR97wPjbCixE0PQhHai29rVSY4kHleO1kFJCYHi2hfVz4aJDqLgjxyY4wSlcDNl0qBMPh2qTeqQKnugxHN0GjarqOGBW5Yl1p8hiz3aSCZjdlPIiMp+pWFZO2Ho6PRDTk0psA86zcV3kFMJZkVrGQ9sraJhNEuuYa047SuZF6Yorrqi91AB2cW+g3nIyR+LGeN2i2uk0k7/y8sQaYk8eUwmT1dDBQqVDI74QA12xR5Nfw+lxk+KCLJANpQdSInNhESN1GpeQw1Kvz3LwZOODFK50hNXckNNnVN5zqWW8F/ByxBsfqdfISKEabFE19zDS8WTc+Dhs4NnMGqEA7FFCSthAmGx6iJLfp69V30hTUeotWIbSymcbZ+PuSIMQjh0uqY0ohjJT6eDXSw4MjqpNfiQ3NLJIhsp7tW4IIOU6e008H4VTirbiS+k2TtSMEJC8vC0a6LjugkWGiqjY0CiQqgsvvLCeccYZIwdkAbOcA1UcIhJWnNJcDC18YH2IYTEMc6SiBLCg2Q6KVaPEoeLOy16Yf42zVjsr79KGw2HMXL0/s55YdxynO8UjeaOb8/1J78C8KLo+J+ZCupszldJ4GGBHJIvYD1uUZBGLjjoFeozJmeMRI6BCtTn3nosINPamRnAyWpm0mk4zrCu+L3Qo/2mSL67njYzSQtEmBQOdJPNJvdYNlaZy3IHBhI7tF5AdQTIaqtqdJLF4jirsZmZ3VyGlt9xBxZlMwUgwWMJoyRydKvWyIkkCHlQMkzsOxkJRzjvvvA2Hi+KnKu0qsCItT6bb3Vi/D50nGU8I6zCVse2uykDN5DBZw/71r385NKhjsEWonfWIaUeIJlvw92QuZEcGPmPIa1i9CvXKybKu/NBAocU6I3thoKK6NIcq/pYxWmDgxXhM1zTCXtdJuDlnT27eWPF93msmBwpSqQKTOhCSWiHnkMBW1XM4igwpMWnpPMTkSilECi+TeJlllkl4XE2f2TT00OTa07xwnmOOMDYVejHJ1jAp0iIkDJ392A7aFloYv/jii+RFtm0oijSuqfSu8PF/AMh8jmsophF5WG+ofpKmObzTksjTHuGaIg4NGRBo1OHONjs9X3h4JS/fi3moYz+52oSUdrvpWxQvf3dx5Uh3yx+zTBhliM6PkSOfRTX1RQUOPWQ98fLC9xRwvJ+IcnxHhppc41qVHS1yjpiEWx96JOoU9bUMYIhdUDUI5oIhTC7vt2wVnRjbenqP7EGBW4ahokA5WUMlKrlDv8scHlaDrSFoqdBKqlsNdZ9O6wfbTUb0FifzjoQNmNoMCW/hogJV8ZJbNb1G9rI7BludPLWAhEYRXxYg5bJdkNep3ZA183frgEv8O7GweLmh92ZiF7hYyGqpzumx9AoMKqWFsHLOqbS2B7EJwsgkKXhr6f99mAzFjIhG2mtQW1Sl4RDYsi/MfB/4jWI2KlfDw1mGcWM1u3zd3dKEfnGGY5Mjy5gLQs7/fmAjc9xxx8U8x+S3SeH7SZo0QW1DxbrGqW49sFe43SQ8Kqp3Cl6tWtHtHRz2uo7V2eS2OErBwtLzEs0EnQdRxFxID/Cg48KAhjAg+eLSWTZSqDkfpUaYhGM1jB6wFzAS1oiu5y010LrgRR3YtYL2SUBvVabeuCtdvFI18ZXnHsphssNe7ulCtnS3k8XKK6/sGCYMlSVtfjROyIuO/wGBCblZ8M1MHwAAAABJRU5ErkJggg==); 
+            }
+            h1 {
+                font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                font-size: 1em;
+            }
+            #pedal-board {
+                margin: 5vh;
+                display: grid;                    
+                background-color: #171717;
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAATq0lEQVRoQ02aBaws1dKFe3qzmWbgEh4WJHjycAjuQYM/LEBwdw/BCR7cgz/DIcHdNVjw4BY0QRI0yDBD0837vkrP/f9Jbs45M9N776patWpV7du76qqr8pprrln9+uuvo6Io8ltvvdW+9957+dNPPx1us802xQ033DDYZJNNRsstt1zed999i6+//rrYdNNN6/vuuy/feOON7UsvvZSPOuqoYoEFFqhvu+225o033qjuuuuuZs455yyOPfbY9tprry2++uqr5p///GfB96rHH3985J5HHHFEy37FAQccUJ999tn9ffbZp/jHP/7hd4u55pqr4Pn02Wef1auttlp5zz331F9++WXl9++88856lVVWafz9p59+qno8PGXbbbetx+NxXnjhhYccsO8iv/zyS8smjZuNRqO0+uqrF/w+Ov7446sZZpihvvjii/P+++/fLL/88unNN9+sn3zyyWLrrbduvv/++zTLLLO4Qb733nuLk08+uX766aerv//97w3r1hw044w4kIb/5z//KWpea6+9dsn6tYe65ZZbRksvvXQ166yzFpyvPuWUU8pXX321WHTRRRNnbXQkr3rdddeteiw2mDJlSqsn+v3+4LnnnisOO+ywho0LN+JfwQOZCCUPcfTRR6frrrtOL1a878/i1ltvbd99991MZEoMGnOwwRprrNHwvfG3336bTzrppILnS9f8/PPP03zzzTfS0KWWWiqfc845xZ577qnXhzilv+qqq7ZErvSErJ/++usvo94QnZqfmcjUrJO/++679plnnsm9q6++upp++ulrNs277bZbgaUl3k5AYoj1Wt6+//77g7POOqt+4YUXsh575513Rhyu4uDNoYceOubfQM8YaiASHmTDRAQaofHxxx9XeHa00korVRtttFHzySefJBxRALXi+eefLzCkxqAGWCaMzbPNNltx+umn+2zCIf6st9pqq0oUnHbaaRo6OOaYY4xo0cPCyhDtuuuu7Zlnntmst9567fXXX983F9Zff/3A2o8//tjiqSzOgUrm+4VeJXLlZpttVuy0007JA4LNhBNKPJqA4BDHmFMN3q8eeuihGkwX++23X95+++31Yv3KK6+UwLPiQMOXX34583npYYlqi4cHPCe0CiBZVlWVjNKGG244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); 
+                width: calc(var(--scale) * var(--unit-width));
+                height: calc(var(--scale) * var(--unit-height));
+                border: 1px solid #000;
+                border-radius: 0.3vw;
+                box-shadow: 1px 6px 14px 0px rgba(0,0,0,0.75);
+                grid-template-columns:
+                    calc(var(--scale) * 11)
+                    calc(var(--scale) * var(--button-size)) 
+                    var(--button-width-gap)
+                    calc(var(--scale) * var(--button-size))
+                    var(--button-width-gap)
+                    calc(var(--scale) * var(--button-size))
+                    var(--button-width-gap)
+                    calc(var(--scale) * var(--button-size))
+                    var(--button-width-gap)
+                    calc(var(--scale) * var(--button-size))
+                    calc(var(--scale) * 11);
+                grid-template-rows:
+                    /* 1 - spacer */
+                    calc(var(--scale) * 10)
+                    calc(var(--scale) * 35)
+                    /* 2 - top row */
+                    calc(var(--scale) * var(--button-size))
+                    /* 3 - spacer */
+                    calc(var(--scale) * 50)
+                    /* 4 - middle row */
+                    calc(var(--scale) * var(--button-size))
+                    /* 5 - spacer */
+                    calc(var(--scale) * 60)
+                    /* 6 - bottom row */
+                    calc(var(--scale) * var(--button-size));
+            }
+            #logo {
+                grid-column-start: 9;
+                grid-column-end: 11;
+                grid-row-start: 2;
+                text-align: right;
+                color: #fff;
+                font-family: 'Barlow', sans-serif;
+                font-size: calc(9 * var(--scale));
+                margin-top: -2vh;
+            }
+            #screen {
+                background: #161616;
+                width: calc(var(--scale) * var(--screen-height));
+                height: calc(var(--scale) * var(--screen-width));
+                grid-column-start: 2;
+                grid-row-start: 2;
+                color: #fff;
+                padding: 0.5vw;
+                display:flex;
+                flex-wrap:wrap;
+            }
+            #screen .outline {
+                margin: 0.6vw 0.2vw 0 0.2vw;
+                padding: 0.3vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #screen .one-col {
+                flex-basis: 100%;
+            }
+            #screen .two-col {
+                display: flex;
+                width: 100%;
+            }
+            #screen .two-col.buttons {
+                margin: 0 -0.2vw;
+                width: calc(100% + 0.2vw);
+            }
+            #screen .two-col > * {
+                flex-basis: calc(100% / 2);
+            }
+            #screen .two-col > *:nth-child(2) {
+                text-align: right;
+            }
+            #screen .three-col {
+                display: flex;
+                width: 100%;
+            }
+            #screen .three-col.buttons {
+                margin: 0 -0.2vw;
+                width: calc(100% + 0.2vw);
+            }
+            #screen .three-col > * {
+                flex-basis: calc(100% / 3);
+            }
+            #screen .four-col {
+                display: flex;
+                width: 100%;
+            }
+            #screen .four-col.buttons {
+                margin: 0 -0.2vw;
+                width: calc(100% + 0.2vw);
+            }
+            #screen .four-col > * {
+                flex-basis: calc(100% / 4);
+            }
+            #screen h1,
+            #screen h2,
+            #screen h3,
+            #screen h4,
+            #screen h5,
+            #screen h6 {
+                margin: 0 0 0.5vw;
+                padding: 0;
+                font-weight: normal;
+                font-size: 1.2vw;
+                filter: blur(0.3px);
+            }
+            #screen h1 {
+                text-transform: uppercase;
+                font-size: 1.4vw;
+            }
+            [data-colour="blue"] #screen {
+                color: rgb(38, 125, 255);
+            }
+            [data-colour="blue"] #screen .outline {
+                border: 1px solid rgb(38, 125, 255);
+            }
+            [data-colour="blue"] #screen .outline.active {
+                background: rgb(38, 125, 255);
+                color: #111;
+            }
+            [data-colour="green"] #screen{
+                color: #80FF00;
+            }
+            [data-colour="green"] #screen .outline {
+                border: 1px solid #80FF00;
+            }
+            [data-colour="green"] #screen .outline.active {
+                background: #80FF00;
+                color: #111;
+            }
+            [data-colour="red"] #screen {
+                color: rgb(175, 0, 0);
+            }
+            [data-colour="red"] #screen .outline {
+                border: 1px solid rgb(175, 0, 0);
+            }
+            [data-colour="red"] #screen .outline.active {
+                background: rgb(175, 0, 0);
+                color: #111;
+            }
+            [data-colour="yellow"] #screen {
+                color: #FF0;
+            }
+            [data-colour="yellow"] #screen .outline {
+                border: 1px solid #FF0;
+            }
+            [data-colour="yellow"] #screen .outline.active {
+                background: #FF0;
+                color: #111;
+            }
+            [data-colour="orange"] #screen {
+                color: #FF7000;
+            }
+            [data-colour="orange"] #screen .outline {
+                border: 1px solid #FF7000;
+            }
+            [data-colour="orange"] #screen .outline.active {
+                background: #FF7000;
+                color: #111;
+            }
+            .foot-switch {
+                text-shadow: hsla(0,0%,40%,.5) 0 -1px 0, hsla(0,0%,100%,.6) 0 2px 1px;
+                padding: 0 0;
+                line-height: var(--button-size);
+                height: calc(var(--scale) * var(--button-size));
+                width: calc(var(--scale) * var(--button-size));
+                border-radius: 50%;
+                text-align: center;
+                border: none;
+                background: #aaa;
+                background-image: -webkit-radial-gradient( 50% 0%, 8% 50%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+    -webkit-radial-gradient( 50% 100%, 12% 50%, hsla(0,0%,100%,.6) 0%, hsla(0,0%,100%,0) 100%),
+    -webkit-radial-gradient( 0% 50%, 50% 7%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+    -webkit-radial-gradient( 100% 50%, 50% 5%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+    -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%, 0%,0) 0%, hsla(0,0%, 0%,0) 3%, hsla(0,0%, 0%,.1) 3.5%),
+    -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 6%, hsla(0,0%,100%,.1) 7.5%),
+    -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.2) 2.2%),
+    -webkit-radial-gradient( 50% 50%, 200% 50%, hsla(0,0%,90%,1) 5%, hsla(0,0%,85%,1) 30%, hsla(0,0%,60%,1) 100%);
+                position: relative;
+                display: grid;
+                justify-items: center;
+                transition: all 0.1s ease-out;
+            }
+            .foot-switch:active {
+                box-shadow: inset hsla(0,0%,15%, 1) 0 0px 0px 4px,
+                    /* border */ inset hsla(0,0%,15%, .8) 0 -1px 5px 4px,
+                    /* soft SD */ inset hsla(0,0%,0%, .25) 0 -1px 0px 7px,
+                    /* bottom SD */ inset hsla(0,0%,100%,.7) 0 2px 1px 7px,
+                    /* top HL */ hsla(0,0%, 0%,.15) 0 -5px 6px 4px,
+                    /* outer SD */ hsla(0,0%,18%,.5) 0 5px 6px 4px;
+            }
+            .foot-switch:before {
+                content: '';
+                color: #fff;
+                position: absolute;
+                top: -6vw;
+                text-align: center;
+                width: calc(var(--scale) * var(--button-size));
+                display: block;
+                font-size: 0.9vw;
+            }
+            .foot-switch:after {
+                content: ' ';
+                border-radius: 50%;;
+                position: absolute;
+                top: -4vw;
+                text-align: center;
+                width: calc(calc(var(--scale) * var(--button-size)) / 4);
+                height: calc(calc(var(--scale) * var(--button-size)) / 4);
+                display: block;
+                background-color: rgba(255, 255, 255, 0.25);
+                box-shadow: #000 0 -1px 6px 1px;
+            }
+            [data-colour="blue"] .foot-switch.active:after {
+                background-color: rgb(38, 125, 255);
+                box-shadow: #000 0 -1px 6px 1px, inset #006 0 -1px 8px, rgb(38, 125, 255) 0 3px 11px;
+            }
+            [data-colour="green"] .foot-switch.active:after {
+                background-color: #80FF00;
+                box-shadow: #000 0 -1px 6px 1px, inset #460 0 -1px 8px, #80FF00 0 3px 11px;
+            }
+            [data-colour="red"] .foot-switch.active:after {
+                background-color: rgb(175, 0, 0);
+                box-shadow: #000 0 -1px 6px 1px, inset #600 0 -1px 8px, rgb(175, 0, 0) 0 3px 11px;
+            }
+            [data-colour="yellow"] .foot-switch.active:after {
+                background-color: #FF0;
+                box-shadow: #000 0 -1px 6px 1px, inset #660 0 -1px 8px, #FF0 0 3px 11px;
+            }
+            [data-colour="orange"] .foot-switch.active:after {
+                background-color: #FF7000;
+                box-shadow: #000 0 -1px 6px 1px, inset #630 0 -1px 8px, #FF7000 0 3px 11px;
+            }
+            #button-1 {
+                grid-column-start: 2;
+                grid-row-start: var(--bottom-row);
+            }
+            #button-1:before {
+                content: '1';
+            }
+            #button-2 {
+                grid-column-start: 4;
+                grid-row-start: var(--bottom-row);
+            }
+            #button-2:before {
+                content: '2';
+            }
+            #button-3 {
+                grid-column-start: 6;
+                grid-row-start: var(--bottom-row);
+            }
+            #button-3:before {
+                content: '3';
+            }
+            #button-4 {
+                grid-column-start: 8;
+                grid-row-start: var(--bottom-row);
+            }
+            #button-4:before {
+                content: '4';
+            }
+            #button-5 {
+                grid-column-start: 10;
+                grid-row-start: var(--bottom-row);
+            }
+            #button-5:before {
+                content: '5';
+            }
+            #button-6 {
+                grid-column-start: 2;
+                grid-row-start: var(--middle-row);
+            }
+            #button-6:before {
+                content: '6';
+            }
+            #button-7 {
+                grid-column-start: 4;
+                grid-row-start: var(--middle-row);
+            }
+            #button-7:before {
+                content: '7';
+            }
+            #button-8 {
+                grid-column-start: 6;
+                grid-row-start: var(--middle-row);
+            }
+            #button-8:before {
+                content: '8';
+            }
+            #button-9 {
+                grid-column-start: 8;
+                grid-row-start: var(--middle-row);
+            }
+            #button-9:before {
+                content: '9';
+            }
+            #button-10 {
+                grid-column-start: 10;
+                grid-row-start: var(--middle-row);
+            }
+            #button-10:before {
+                content: '10';
+            }
+            #button-a {
+                grid-column-start: 6;
+                grid-row-start: var(--top-row);
+            }
+            #button-a:before {
+                content: 'A';
+            }
+            #button-b {
+                grid-column-start: 8;
+                grid-row-start: var(--top-row);
+            }
+            #button-b:before {
+                content: 'B';
+            }
+            #button-c {
+                grid-column-start: 10;
+                grid-row-start: var(--top-row);
+            }
+            #button-c:before {
+                content: 'C';
+            }
+            .finger-switch {
+                width: 3vw;
+                height: 100%;
+                background: #111;
+                border: 1px solid #222;
+                color: #a1a1a1;
+                outline: 1px solid #000;
+            }
+            .finger-switch:active {
+                background: #151515;
+                border-bottom: 1px solid #2d2d2d;
+                border-right: 1px solid #1e1e1e;
+            }
+            #buttonSet1 {
+                grid-column-start: 5;
+                grid-row-start: 2;
+                text-align: center;
+            }
+            #buttonSet2 {
+                grid-column-start: 7;
+                grid-row-start: 2;
+                text-align: center;
+            }
+            .double-switch {
+                background: none;
+                color: #fff;
+                border: 0;
+                text-transform: uppercase;
+                align-self: start;
+                padding-top: calc(var(--scale) * 2);
+                font-size: 0.9vw;
+            }
+            #change-mode {
+                grid-column-start: 3;
+                grid-row-start: 6;
+            }
+            #cancel {
+                grid-column-start: 9;
+                grid-row-start: 3;
+            }
+            #options {
+                color: #fff;
+                width: 100%;
+                padding: 3em 1em;
+                background: #111;
+                display: grid;
+            }
+            #options ul,
+            header ul {
+                list-style: none;
+                display: flex;
+            }
+            #options ul li,
+            header ul li {
+                flex-grow: 1;
+            }
+            header {
+                display: grid;
+                grid-template-columns: 1fr 3fr;
+                color: #fff;
+            }
+            #help,
+            #help article {
+                display: none;
+            }
+            #help.active {
+                display: block;
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+            #help article.active {
+                display: block;
+                padding: 1em;
+                border-radius: 0.3em;
+                background: #111;
+                color: #fff;
+                position: absolute;
+                top: 2em;
+                bottom: 2em;
+                left: 0;
+                right: 0;
+                margin: 0 12em;
+            }
+            #help p,
+            #help ul {
+                margin-top: 1em;
+            }
+            #help ul {
+                margin-left: 1em;
+            }
+            a {
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body data-colour="blue">
+        <!--header>
+            <h1>MIDI Pedal Board</h1>
+        </header-->
+        <section id="pedal-board">
+            <h2 id="logo">🔧 MIDI Toolbox</h2>
+            <div id="screen"></div>
+            <button class="foot-switch row-1 number-button" id="button-1" data-button-id="1"></button>
+            <button class="foot-switch row-1 number-button" id="button-2" data-button-id="2"></button>
+            <button class="foot-switch row-1 number-button" id="button-3" data-button-id="3"></button>
+            <button class="foot-switch row-1 number-button" id="button-4" data-button-id="4"></button>
+            <button class="foot-switch row-1 number-button" id="button-5" data-button-id="5"></button>
+            <button class="foot-switch row-2 number-button" id="button-6" data-button-id="6"></button>
+            <button class="foot-switch row-2 number-button" id="button-7" data-button-id="7"></button>
+            <button class="foot-switch row-2 number-button" id="button-8" data-button-id="8"></button>
+            <button class="foot-switch row-2 number-button" id="button-9" data-button-id="9"></button>
+            <button class="foot-switch row-2 number-button" id="button-10" data-button-id="10"></button>
+            <button class="foot-switch row-3 letter-button" id="button-a" data-button-id="a"></button>
+            <button class="foot-switch row-3 letter-button" id="button-b" data-button-id="b"></button>
+            <button class="foot-switch row-3 letter-button" id="button-c" data-button-id="c"></button>
+            <!--
+            <button class="double-switch" id="change-mode" data-button-id="1-2">&#8212; &nbsp; &nbsp; &nbsp; &nbsp; Select Mode &nbsp; &nbsp; &nbsp; &nbsp; &#8212;</button>
+            -->
+        </section>
+        <section id="options">
+            <div id="general">
+                <h2>General settings</h2>
+                <p>
+                    <label>
+                        Colour scheme
+                        <select name="colour" id="colour">
+                            <option value="blue">Blue</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="orange">Orange</option>
+                        </select>
+                    </label>
+                </p>
+            </div>
+        </section>
+        <script>
+            const config = {
+    // set some defaults
+    "config": {
+        "defaultLedColor": [0,0,255],
+        "defaultScreenForeColor": [0,0,255]
+    },
+    // the mode the unit first loads
+    "selectMode": {
+        // this built-in mode allows the user to select a different mode
+        "name": "ModeSelect",
+        "title": "Select mode...",
+        "modeType": "BuiltIn",
+        "actions": [
+            {
+                // press button A to go up a mode
+                "buttonId": 'a',
+                // define what will appear on the screen for this button
+                "screenText": "&#x25C0;",
+                "onPress": [
+                    {
+                        "actionType": "ModeDown"
+                    }
+                ]
+            },{
+                // press button B to go down a mode
+                "buttonId": 'b',
+                "screenText": "&#x25B6;",
+                "onPress": [
+                    {
+                        "actionType": "ModeUp"
+                    }
+                ]
+            },{
+                // press button C to choose the selected mode
+                "buttonId": 'c',
+                "screenText": "OK",
+                "onPress": [
+                    {
+                        "actionType": "ChooseMode"
+                    }
+                ]
+            },{
+                "buttonId": '1-2',
+                "onPress": [
+                    {
+                        "actionType": "ChangeMode",
+                        "parameters": {
+                            "toMode": "ModeSelect"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    // the unit has built-in modes, and custom modes the user can define
+    "modes": [
+        {
+            // this custom mode sends MIDI notes
+            "name": "Notes",
+            "title": "Note mode",
+            // this description will appear on the screen when cycling through the modes
+            "description": "Send MIDI notes",
+            "modeType": "Custom",
+            // set some optional defaults for this mode
+            "defaults": {
+                "key": "C major",
+                "octave": 3
+            },
+            // set the actions when buttons are pressed
+            "actions": [
+                {
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '1',
+                    // show something on the screen for this button
+                    "screenText": "C", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                        // we trigger other events here as well
+                    ]
+                },{
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '2',
+                    // show something on the screen for this button
+                    "screenText": "F", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                        // we trigger other events here as well
+                    ]
+                },{
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '3',
+                    // show something on the screen for this button
+                    "screenText": "G", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                        // we trigger other events here as well
+                    ]
+                },{
+                    // press button 1 to send a MIDI note message
+                    "buttonId": '4',
+                    // show something on the screen for this button
+                    "screenText": "A", // or some key-contextual value like "noteIndex(1)" to show the tonic of the current key
+                    // the default mode for the button is momentary, or we can set it to "latched"
+                    "mode": "momentary",
+                    // automatically light the LED when this button is pressed and turn the LED off when the button is released
+                    // we can set the color of the LED (because we use RGB LEDs)
+                    "ledColor": [255,0,0],
+                    // when the button is pressed
+                    "onPress": [
+                        {
+                            // send a MIDI Note message
+                            "actionType": "MIDI",
+                            "parameters": {
+                                // this is a NoteOn 
+                                // if the mode of the button is momentary then NoteOff is sent when the button is released
+                                // if the mode of the button id latched then NoteOff is sent when the button is pressed again
+                                "messageType": "Note",
+                                // this value could be fixed
+                                //"noteValue": 64
+                                // or automatically figured out from the current key
+                                "noteKeyIndex": 1 // play the tonic of the current key
+                            }
+                        }
+                    ]
+                },{
+                    // this button changes the octave up
+                    "buttonId": 'a',
+                    "screenText": "Octv UP",
+                    "onPress": [
+                        {
+                            // this is a built in action which affects MIDI notes played
+                            "actionType": "ChangeOctave",
+                            "parameters": {
+                                "direction": "Up"
+                            }
+                        }
+                    ]
+                },{
+                    // and this changes the octave down
+                    "buttonId": 'b',
+                    "screenText": "Octv DN",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeOctave",
+                            "parameters": {
+                                "direction": "Down"
+                            }
+                        }
+                    ]
+                },{
+                    // and this resets the octave
+                    "buttonId": 'c',
+                    "screenText": "Octv RST",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeOctave",
+                            "parameters": {
+                                "direction": "Default"
+                            }
+                        }
+                    ]
+                },{
+                    // when pressing buttons 1 and 2 together - this is applied to all modes
+                    "buttonId": '1-2',
+                    // we don't show anything on the screen for this combination
+                    // basically because I haven't worked out how to do that
+                    "onPress": [
+                        {
+                            // change the mode...
+                            "actionType": "ChangeMode",
+                            "parameters": {
+                                // to the built-in ModeSelect mode
+                                "toMode": "ModeSelect"
+                            }
+                        }
+                    ]
+                }
+                // we could add actions to the other buttons, like change key up or down, change octave etc
+            ]
+        },{
+            "name": "SET1",
+            "title": "Set 1 FX",
+            "description": "Effects for set 1",
+            "modeType": "Custom",
+            // set some optional defaults for this mode
+            "defaults": {
+                "key": "C major",
+                "octave": 3
+            },
+            "actions": [
+                {
+                    "buttonId": '1',
+                    "screenText": "Rvb",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '2',
+                    "screenText": "Dly",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '3',
+                    "screenText": "Phs",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '4',
+                    "screenText": "Ovd",
+                    "mode": "latched",
+                    "ledColor": [255,0,0],
+                    "ledMode": 'exclusive',
+                    "onPress": [
+                        {
+                            "actionType": "MIDI",
+                            "parameters": {
+                                "messageType": "ProgramChange",
+                                "messageValue": 127
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": 'a',
+                    "screenText": "&#x25C0;",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeBank",
+                            "parameters": {
+                                "direction": "Up"
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": 'b',
+                    "screenText": "&#x25B6;",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeBank",
+                            "parameters": {
+                                "direction": "Down"
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": 'c',
+                    "screenText": "TUNER",
+                    "mode": "latched",
+                    "onPress": [
+                        {
+                            "actionType": "ChangeBank",
+                            "parameters": {
+                                "direction": "Down"
+                            }
+                        }
+                    ]
+                },{
+                    "buttonId": '1-2',
+                    "onPress": [
+                        {
+                            "actionType": "ChangeMode",
+                            "parameters": {
+                                "toMode": "ModeSelect"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+            const body = document.querySelector('body'),
+                // how many buttons on the board
+                numberOfButtons = 7,
+                // how the buttons are laid out on the board, translates to areas on the screen
+                buttonLayout = [
+                    ['a','b','c'],
+                    ['6','7','8','9','10'],
+                    ['1','2','3','4','5']
+                ],
+                // array of key signatures
+                keys = [
+                    {
+                        'index': 0,
+                        'majorKey': 'C major',
+                        'minorKey': 'A minor',
+                    },
+                    {
+                        'index': 1,
+                        'majorKey': 'Db major',
+                        'minorKey': 'Bb minor',
+                    },
+                    {
+                        'index': 2,
+                        'majorKey': 'D major',
+                        'minorKey': 'B minor',
+                    },
+                    {
+                        'index': 3,
+                        'majorKey': 'Eb major',
+                        'minorKey': 'C minor',
+                    },
+                    {
+                        'index': 4,
+                        'majorKey': 'E major',
+                        'minorKey': 'C# minor',
+                    },
+                    {
+                        'index': 5,
+                        'majorKey': 'F major',
+                        'minorKey': 'D minor',
+                    },
+                    {
+                        'index': 6,
+                        'majorKey': 'Gb major',
+                        'minorKey': 'Eb minor',
+                    },
+                    {
+                        'index': 7,
+                        'majorKey': 'G major',
+                        'minorKey': 'E minor',
+                    },
+                    {
+                        'index': 8,
+                        'majorKey': 'Ab major',
+                        'minorKey': 'F minor',
+                    },
+                    {
+                        'index': 9,
+                        'majorKey': 'A major',
+                        'minorKey': 'F# minor',
+                    },
+                    {
+                        'index': 10,
+                        'majorKey': 'Bb major',
+                        'minorKey': 'G minor',
+                    },
+                    {
+                        'index': 11,
+                        'majorKey': 'B major',
+                        'minorKey': 'G# minor',
+                    }
+                ];
+            let currentConfig = {},
+
+                // data about the current mode
+                currentModeName = 'ModeSelect',
+                currentModeIndex = -1,
+                currentMode = null,
+                currentModeButtons = {},
+
+                // data about the selected mode, used when changing mode
+                selectedModeIndex = 0,
+                selectedModeName = null,
+
+                // data about the current musical context
+                currentMajorMinorMode = 'major',
+                currentKeyIndex = 0,
+                currentOctave = 3,
+                activeButtons = [];
+
+            const buttons = document.querySelectorAll('button'),
+                screen = document.getElementById('screen');
+
+            function initialise(config) {
+                if (!config) {
+                    renderError("Bad config!");
+                    return;
+                }
+
+                currentConfig = config;
+
+                // data about the selected mode, used when changing mode
+                selectedModeIndex = 0;
+                selectedModeName = null;
+
+                // data about the current musical context
+                currentMajorMinorMode = 'major';
+                currentKeyIndex = 0;
+                currentOctave = 3;
+                activeButtons = [];
+                
+                initialiseSelectMode();
+
+                // in the real code this is handled by a loop and monitoring the voltage for each button
+                buttons.forEach((el) => {
+                    el.addEventListener('mousedown', function(){ handleClick(el); });
+                });
+
+                renderScreen();
+            }
+
+            function initialiseSelectMode() {
+                currentMode = currentConfig.selectMode;
+                currentModeName = currentMode.name;
+                currentModeIndex = -1;
+                getModeActions();
+            }
+
+            function getMode() {
+                const foundModes = currentConfig.modes.filter((mode) => {
+                    return mode.name === currentModeName;
+                });
+                if (!foundModes || foundModes.length !== 1) {
+                    renderError(`Could not find mode with name '${currentModeName}'`);
+                }
+                currentMode = foundModes[0];
+                currentModeName = currentMode.name;
+                getModeActions();
+            }
+
+            function getModeActions() {
+                currentModeButtons = [];
+                currentMode.actions.forEach((act) => {
+                    currentModeButtons[act.buttonId] = act;
+                });
+            }
+
+            // generic button handling
+
+            // handle a click on a button
+            function handleClick(el) {
+                const buttonId = el.dataset.buttonId;
+                if (!buttonId) {
+                    renderError("The clicked element is not a valid button");
+                    return;
+                }
+                const button = getButton(buttonId);
+                if (!button) {
+                    return;
+                }
+                executeButtonActions(button);
+            }
+
+            // execute the actions for a button, in the order they appear in the config
+            function executeButtonActions(button) {
+                button.onPress.forEach((act) => {
+                    switch (act.actionType) {
+                        case 'ModeDown':
+                            highlightButton(button);
+                            doModeDown(button);
+                            break;
+                        case 'ModeUp':
+                            highlightButton(button);
+                            doModeUp(button);
+                            break;
+                        case 'ChooseMode':
+                            highlightButton(button);
+                            doChooseMode(button);
+                            break;
+                        case 'ChangeMode':
+                            initialiseSelectMode();
+                            renderScreen();
+                            break;
+                        default:
+                            //renderError("Unsupported action");
+                            highlightButton(button);
+                    }
+                });
+            }
+
+            // get a single button from the current mode by ID
+            function getButton(buttonId) {
+                const action = currentMode.actions.filter((act) => {
+                    return act.buttonId === buttonId;
+                });
+                return !action ? null : action[0];
+            }
+
+            // select mode methods
+
+            function doModeDown() {
+                if (selectedModeIndex < 0) {
+                    selectedModeIndex = 0;
+                }
+                if (selectedModeIndex === 0) {
+                    selectedModeIndex = currentConfig.modes.length - 1;
+                } else {
+                    selectedModeIndex = selectedModeIndex - 1;
+                }
+                const newMode = currentConfig.modes[selectedModeIndex];
+                selectedModeName = newMode.name;
+                document.getElementById('title').innerHTML = newMode.title;
+            }
+
+            function doModeUp() {
+                if (selectedModeIndex < 0) {
+                    selectedModeIndex = 0;
+                }
+                if (selectedModeIndex ===  currentConfig.modes.length - 1) {
+                    selectedModeIndex = 0;
+                } else {
+                    selectedModeIndex = selectedModeIndex + 1;
+                }
+                const newMode = currentConfig.modes[selectedModeIndex];
+                selectedModeName = newMode.name;
+                document.getElementById('title').innerHTML = newMode.title;
+            }
+
+            function doChooseMode() {
+                currentMode = currentConfig.modes[selectedModeIndex];
+                currentModeName = currentMode.name;
+                currentModeIndex = selectedModeIndex;
+                getModeActions();
+                renderScreen();
+            }
+
+            // screen render methods
+
+            function renderError(msg) {
+                screen.innerHTML = `<p>${msg}</p>`;
+            }
+
+            // highlight the button
+            function highlightButton(button) {
+                const screenButtonEl = document.getElementById(`screen-button-${button.buttonId}`),
+                    buttonEl = document.getElementById(`button-${button.buttonId}`);
+                if (!screenButtonEl && !buttonEl) {
+                    return;
+                }
+                if (button.mode === 'latched') {
+                    screenButtonEl.classList.toggle('active');
+                    buttonEl.classList.toggle('active');
+                } else {
+                    screenButtonEl.classList.add('active');
+                    buttonEl.classList.add('active');
+                    buttonEl.addEventListener('mouseup', function(){
+                        screenButtonEl.classList.remove('active');
+                        buttonEl.classList.remove('active');
+                    });
+                }
+            }
+
+            // built-in actions
+
+            function changeOctave(direction, id) {
+                // go down an octave
+                if (direction === 'down' && currentOctave > 0) {
+                    currentOctave = currentOctave - 1;
+                }
+                // go up an octave
+                if (direction === 'up' && currentOctave < 6) {
+                    currentOctave = currentOctave + 1;
+                }
+            }
+
+            function toggleMajorMinor(id) {
+                currentMajorMinorMode = currentMajorMinorMode === 'major' ? 'minor' : 'major';
+                activateButton('single', false, 'letter', id);
+                setCurrentKey();
+            }
+
+            function activateButton(mode, latch, type, id) {
+                if (mode === 'exclusive') {
+                    const alreadyActive = activeButtons[type].includes(id);
+                    activeButtons[type] = [];
+                    if (!alreadyActive) {
+                        activeButtons[type].push(id);
+                    }
+                    document.querySelectorAll(`.${type}-button,.screen-${type}-button`).forEach((el) => {
+                        el.classList.remove('active');
+                    });
+                } else {
+                    if (!activeButtons[type].includes(id)) {
+                        activeButtons[type].push(id);
+                    }
+                }
+                activeButtons[type].forEach((activeid) => {
+                    document.getElementById(activeid).classList.add('active');
+                    document.getElementById(`screen-${activeid}`).classList.add('active');
+                });
+                if (!latch) {
+                    setTimeout(() => {
+                        activeButtons[type] = activeButtons[type].filter((activeid) => {
+                            return activeid != id;
+                        });
+                        document.querySelectorAll(`#${id},#screen-${id}`).forEach((el) => {
+                            el.classList.remove('active');
+                        });
+                    }, 250);
+                }
+            }
+
+            function renderScreen() {
+                let html = '';
+                html += `<h1 class="one-col" id="title">${currentMode.title}</h1>`;
+                buttonLayout.forEach((row) => {
+                    let layoutClass = 'four-col buttons';
+                    if (row.length === 3) {
+                        layoutClass = 'three-col buttons';
+                    }
+                    html += `<div class="${layoutClass}">`;
+                    row.forEach((buttonId) => {
+                        const button = getButton(buttonId);
+                        if (button) {
+                            html += `<p class="outline" id="screen-button-${buttonId}">${button.screenText}</p>`;
+                        }
+                    });
+                    html += '</div>';
+                });
+                /*
+                html += `
+                <div class="three-col buttons">
+                    <p class="outline screen-letter-button${activeButtons.letter.includes('button-a') ? ' active' : ''}" id="screen-button-a">${currentScreenConfig.buttons.a}</p>
+                    <p class="outline screen-letter-button${activeButtons.letter.includes('button-b') ? ' active' : ''}" id="screen-button-b">${currentScreenConfig.buttons.b}</p>
+                    <p class="outline screen-letter-button${activeButtons.letter.includes('button-c') ? ' active' : ''}" id="screen-button-c">${currentScreenConfig.buttons.c}</p>
+                </div>
+                <div class="four-col buttons">
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-1') ? ' active' : ''}" id="screen-button-1">${currentScreenConfig.buttons['1']}</p>
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-2') ? ' active' : ''}" id="screen-button-2">${currentScreenConfig.buttons['2']}</p>
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-3') ? ' active' : ''}" id="screen-button-3">${currentScreenConfig.buttons['3']}</p>
+                    <p class="outline screen-number-button${activeButtons.number.includes('button-4') ? ' active' : ''}" id="screen-button-4">${currentScreenConfig.buttons['4']}</p>
+                </div>
+                `;
+                */
+                screen.innerHTML = html;
+            }
+
+            initialise(config);
+
+            // Functions for the page, not the unit
+
+            document.querySelector('#colour').addEventListener('change', function() {
+                body.setAttribute('data-colour', this.value);
+            });
+
+            const helpLinks = document.querySelectorAll('header a'),
+                helpSection = document.getElementById('help');
+            helpLinks.forEach((el) => {
+                el.addEventListener('click', function() {
+                    helpSection.classList.add('active');
+                    const selectedHelpArticle = document.getElementById(el.href.split('#')[1]);
+                    selectedHelpArticle.classList.add('active');
+                    body.addEventListener('keyup', (k) => {
+                        if (k.key === "Escape") {
+                            helpSection.classList.remove('active');
+                            selectedHelpArticle.classList.remove('active');
+                        }
+                    }, { once: true });
+                });
+            });
+        </script>
+        <!--
+            LED styling from: https://github.com/aus/led.css
+            Brushed metal effect modified from: https://codepen.io/oobleck/pen/MYBvGa
+        -->
+    </body>
+</html>

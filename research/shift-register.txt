@@ -1,0 +1,3 @@
+latchPin = ST_CP
+clockPin = SH_CP
+dataPin = DS

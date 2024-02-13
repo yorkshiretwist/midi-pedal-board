@@ -69,7 +69,7 @@ std::vector<Note> currentPlayingNotes;
 std::vector<Note> allNotes;
 
 // the deserialised JSON file
-DynamicJsonDocument jsonDoc(100000);
+JsonDocument jsonDoc;
 
 // an error deserialising the JSoN file (if any)
 DeserializationError jsonError;
@@ -289,7 +289,7 @@ void turnAllNotesOff() {
   }
   // turn the current button light off
   if (currentButtonIndex > -1) {
-    digitalWrite(ledPins[currentButtonIndex], LOW);
+    //digitalWrite(ledPins[currentButtonIndex], LOW);
   }
   // clear all current notes
   currentPlayingNotes.clear();
@@ -400,6 +400,7 @@ void playNote(Note note) {
   currentPlayingNotes.push_back(note);
   // play the note on the current MIDI channel
   usbMIDI.sendNoteOn(note.MidiNoteNumber, 99, midiChannels[currentMidiChannelIndex]);
+  //usbMIDI.sendProgramChange(program, channel)
 }
 
 // stop playing the given note
@@ -459,6 +460,13 @@ void registerDown() {
    print("Changing register down from " + registers[previousRegisterIndex] + " to " + registers[currentRegisterIndex]);
 }
 
+void changeRegister(int newRegisterIndex) {
+  previousRegisterIndex = currentRegisterIndex;
+  changingRegister = true;
+  currentRegisterIndex = newRegisterIndex;
+  print("Changing register down from " + registers[previousRegisterIndex] + " to " + registers[currentRegisterIndex]);
+}
+
 // ============================================================================
 // button variables and functions
 
@@ -467,6 +475,7 @@ void triggerButton(int buttonIndex) {
 
   // if we've not initialised the box yet then do it
   if (initialised == false) {
+    print("Initialising... ");
     initialised = true;
     display();
     return;
@@ -480,22 +489,37 @@ void triggerButton(int buttonIndex) {
   // if the button index is 5 or above then handle special functions
   if (buttonIndex >= 5) {
 
-    // button 6 - change mode
+    // middle row
+
+    // button 6 - low register
     if (buttonIndex == 5) {
+      changeRegister(0);
+    }
+
+    // button 7 - middle register
+    if (buttonIndex == 6) {
+      changeRegister(1);
+    }
+
+    // button 8 - wide register
+    if (buttonIndex == 7) {
+      changeRegister(2);
+    }
+
+    // button 9 - high register
+    if (buttonIndex == 8) {
+      changeRegister(3);
+    }
+
+    // top row
+
+    // button A - change mode
+    if (buttonIndex == 10) {
       changeMode();
     }
 
-    // button A - change register down
-    if (buttonIndex == 6) {
-      registerDown();
-    }
-    // button B - change register up
-    if (buttonIndex == 7) {
-      registerUp();
-    }
-
-    // button C - change key down/MIDI channel down
-    if (buttonIndex == 8) {
+    // button B - change key down/MIDI channel down
+    if (buttonIndex == 11) {
       if (modes[currentModeIndex].compareTo("Key") == 0) {
         keyDown();
       } else if (modes[currentModeIndex].compareTo("Chn") == 0) {
@@ -503,8 +527,8 @@ void triggerButton(int buttonIndex) {
       }
     }
 
-    // button D - change key up/MIDI channel up
-    if (buttonIndex == 9) {
+    // button C - change key up/MIDI channel up
+    if (buttonIndex == 12) {
       if (modes[currentModeIndex].compareTo("Key") == 0) {
         keyUp();
       } else if (modes[currentModeIndex].compareTo("Chn") == 0) {
@@ -542,8 +566,16 @@ void triggerButton(int buttonIndex) {
   currentButtonIndex = buttonIndex;
   
   // get the button
-  JsonObject buttonConfig = getButton(jsonDoc, buttonIndex);
-  if (buttonConfig["index"].as<int>() < 0) {
+  JsonObject buttonConfig; //getButton(jsonDoc, buttonIndex);
+  JsonArray array = jsonDoc["buttons"].as<JsonArray>();
+  for(JsonObject button : array) {
+      if (button["index"].as<int>() == buttonIndex) {
+        buttonConfig = button;
+      }
+  }
+
+  print(serializeJson(buttonConfig, Serial));
+  if (buttonConfig == NULL) {
     print("Could not find button");
     display("Could not find button");
     return;
@@ -649,7 +681,7 @@ void triggerButton(int buttonIndex) {
   }
 
   // turn the LED for the triggered button on
-  digitalWrite(ledPins[currentButtonIndex], HIGH);
+  //digitalWrite(ledPins[currentButtonIndex], HIGH);
 
   print("");
   display();
@@ -660,6 +692,8 @@ void triggerButton(int buttonIndex) {
 // setup function
 
 void setup() {
+
+  print("setup() called");
 
   // waitn for the Serial to be available (no more than 3 seconds)
   while (!Serial && millis () < 3000);
@@ -685,12 +719,14 @@ void setup() {
   readJson();
 
   // cycle through all LEDs
+  /*
   for(int x = 0; x < 3; x++) { //(int)sizeof(ledPins)
     print("Testing LED on pin " + (String)ledPins[x]);
     digitalWrite(ledPins[x], HIGH);
     delay(100);
     digitalWrite(ledPins[x], LOW);
   }
+  */
 
   displayWelcome();
 }
@@ -708,11 +744,16 @@ void loop() {
   button2.update();
   button3.update();
   button4.update();
+  
   button5.update();
+  button6.update();
+  button7.update();
+  button8.update();
+  button9.update();
+
   buttonA.update();
   buttonB.update();
   buttonC.update();
-  buttonD.update();
 
   // 1
   if (button0.fallingEdge()) {
@@ -744,24 +785,39 @@ void loop() {
     triggerButton(5);
   }
 
+  // 7
+  if (button6.fallingEdge()) {
+    triggerButton(6);
+  }
+
+  // 8
+  if (button7.fallingEdge()) {
+    triggerButton(7);
+  }
+
+  // 9
+  if (button8.fallingEdge()) {
+    triggerButton(8);
+  }
+
+  // 10
+  if (button9.fallingEdge()) {
+    triggerButton(9);
+  }
+
   // A
   if (buttonA.fallingEdge()) {
-    triggerButton(6);
+    triggerButton(10);
   }
 
   // B
   if (buttonB.fallingEdge()) {
-    triggerButton(7);
+    triggerButton(11);
   }
 
   // C
   if (buttonC.fallingEdge()) {
-    triggerButton(8);
-  }
-
-  // D
-  if (buttonD.fallingEdge()) {
-    triggerButton(9);
+    triggerButton(12);
   }
 
   // if note hold mode is off, turn off the playing notes when buttons 0 - 4 are released

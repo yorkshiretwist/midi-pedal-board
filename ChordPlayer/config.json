@@ -36,7 +36,7 @@
                 "spread": "Up",
                 "registerName": "Wide",
                 "chordName": "C2",
-                "notes": ["C2", "C3", "G3", "D4", "E4"]
+                "notes": ["C2", "C3", "G3", "D4", "E4", "G4"]
             },{
                 "spread": "Down",
                 "registerName": "High",
@@ -62,7 +62,91 @@
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High G5",
-                "notes": ["G4", "G5", "D6"]
+                "notes": ["D5", "G5", "D6"]
+            }]
+        },{
+            "name": "D",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low D octave",
+                "notes": ["D1", "D2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "D",
+                "notes": ["D2", "D3", "F#3", "A3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "D2",
+                "notes": ["D2", "D3", "A3", "E4", "F#4", "A4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High D5",
+                "notes": ["D5", "A5", "D6"]
+            }]
+        },{
+            "name": "A",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low A octave",
+                "notes": ["A1", "A2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "A",
+                "notes": ["A2", "A3", "C#3", "E4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "A2",
+                "notes": ["A1", "C#3", "B3", "E4", "A4", "E5"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High A5",
+                "notes": ["E5", "A5", "E6"]
+            }]
+        },{
+            "name": "E",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low E octave",
+                "notes": ["E1", "E2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "E",
+                "notes": ["E2", "E3", "G#3", "B3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "E2",
+                "notes": ["E2", "E3", "B3", "F#4", "G#4", "B4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High E5",
+                "notes": ["E5", "B5", "E6"]
+            }]
+        },{
+            "name": "F",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low F octave",
+                "notes": ["F1", "F2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "F",
+                "notes": ["F2", "F3", "A3", "C3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "F2",
+                "notes": ["F2", "F3", "C3", "G4", "A4", "C4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High F5",
+                "notes": ["F5", "C5", "F6"]
             }]
         }]
     },{
@@ -82,7 +166,7 @@
                 "spread": "Up",
                 "registerName": "Wide",
                 "chordName": "Dm9",
-                "notes": ["D3", "D4", "A4", "C4", "F4"]
+                "notes": ["D2", "D3", "A3", "C4", "E4", "F4"]
             },{
                 "spread": "Down",
                 "registerName": "High",
@@ -97,8 +181,8 @@
                 "notes": ["A1", "A2"]
             },{
                 "registerName": "Middle",
-                "chordName": "Am7",
-                "notes": ["A2", "A3", "C3", "E4"]
+                "chordName": "Am",
+                "notes": ["A2", "E3", "A3", "C4"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
@@ -108,7 +192,91 @@
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High Am5",
-                "notes": ["A4", "A5", "E6"]
+                "notes": ["E5", "A5", "E6"]
+            }]
+        },{
+            "name": "D",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low E octave",
+                "notes": ["E1", "E2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Em7",
+                "notes": ["E2", "E3", "G3", "B3", "D4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Em9",
+                "notes": ["E2", "E3", "B3", "D4", "F#4", "G4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Em5",
+                "notes": ["E5", "B5", "E6"]
+            }]
+        },{
+            "name": "A",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low B octave",
+                "notes": ["B1", "B2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Bm",
+                "notes": ["B2", "F#3", "B3", "D4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Bm9",
+                "notes": ["B1", "D3", "C#4", "F#4", "A4", "B4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Bm5",
+                "notes": ["F#5", "B5", "F#6"]
+            }]
+        },{
+            "name": "E",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low F# octave",
+                "notes": ["F#1", "F#2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "F#m7",
+                "notes": ["F#2", "F#3", "A3", "C#3", "E4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "F#m9",
+                "notes": ["F#2", "F#3", "C#3", "E4", "G#4", "A4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High F#m5",
+                "notes": ["F#5", "C#5", "F#6"]
+            }]
+        },{
+            "name": "F",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low G octave",
+                "notes": ["G1", "G2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Gm7",
+                "notes": ["G2", "G3", "Bb3", "D3", "F4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "FG9",
+                "notes": ["G2", "G3", "D3", "F4", "A4", "Bb4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Gm5",
+                "notes": ["G5", "D5", "G6"]
             }]
         }]
     },{
@@ -123,17 +291,17 @@
             },{
                 "registerName": "Middle",
                 "chordName": "F",
-                "notes": ["F2", "F3", "C4", "A4", "C4"]
+                "notes": ["F2", "C3", "F3", "A3"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
                 "chordName": "F2",
-                "notes": ["F2", "F3", "C3", "G3", "A3"]
+                "notes": ["F2", "F3", "C3", "G3", "A3", "C4"]
             },{
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High F5",
-                "notes": ["F5", "C5", "F6"]
+                "notes": ["C5", "F5", "C6"]
             }]
         },{
             "name": "G",
@@ -144,7 +312,7 @@
             },{
                 "registerName": "Middle",
                 "chordName": "C",
-                "notes": ["C2", "C3", "G3", "E4"]
+                "notes": ["C2", "C3", "E3", "G3"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
@@ -155,6 +323,90 @@
                 "registerName": "High",
                 "chordName": "High C5",
                 "notes": ["C5", "G5", "C6"]
+            }]
+        },{
+            "name": "D",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low G octave",
+                "notes": ["G1", "G2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "G",
+                "notes": ["G2", "D3", "G3", "B3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "G2",
+                "notes": ["G2", "G3", "D3", "A3", "B3", "D4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High G5",
+                "notes": ["G5", "G5", "D6"]
+            }]
+        },{
+            "name": "A",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low D octave",
+                "notes": ["D1", "D2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "D",
+                "notes": ["D2", "D3", "F#3", "A3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "D2",
+                "notes": ["D2", "D3", "A3", "E4", "F#4", "A4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High D5",
+                "notes": ["D5", "A5", "D6"]
+            }]
+        },{
+            "name": "E",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low A octave",
+                "notes": ["A1", "A2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "A",
+                "notes": ["A2", "E3", "A3", "C#3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "A2",
+                "notes": ["A2", "A3", "E3", "B3", "C#3", "E4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High A5",
+                "notes": ["A5", "A5", "E6"]
+            }]
+        },{
+            "name": "F",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low Bb octave",
+                "notes": ["Bb1", "Bb2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Bb",
+                "notes": ["Bb2", "F3", "Bb3", "D3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Bb2",
+                "notes": ["Bb1", "Bb3", "F3", "C3", "D3", "F4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Bb5",
+                "notes": ["Bb5", "Bb5", "F6"]
             }]
         }]
     },{
@@ -169,17 +421,17 @@
             },{
                 "registerName": "Middle",
                 "chordName": "G",
-                "notes": ["G2", "G3", "D4", "B4", "D4"]
+                "notes": ["G2", "G3", "B3", "D4"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
                 "chordName": "G2",
-                "notes": ["G2", "G3", "D4", "G4", "A4", "B4"]
+                "notes": ["G1", "G2", "D3", "G3", "A3", "G3"]
             },{
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High G5",
-                "notes": ["G5", "D5", "G6"]
+                "notes": ["D5", "G5", "D6"]
             }]
         },{
             "name": "G",
@@ -190,7 +442,7 @@
             },{
                 "registerName": "Middle",
                 "chordName": "D",
-                "notes": ["D2", "D3", "F#4", "A4", "D5"]
+                "notes": ["D2", "D3", "F#3", "A3"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
@@ -200,7 +452,91 @@
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High D5",
-                "notes": ["D4", "D5", "A5"]
+                "notes": ["D5", "D6", "A6"]
+            }]
+        },{
+            "name": "D",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low A octave",
+                "notes": ["A1", "A2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "A",
+                "notes": ["A2", "A3", "C#3", "E4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "A2",
+                "notes": ["A1", "A2", "E3", "A3", "B3", "A3"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High A5",
+                "notes": ["E5", "A5", "E6"]
+            }]
+        },{
+            "name": "A",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low E octave",
+                "notes": ["E1", "E2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "E",
+                "notes": ["E2", "E3", "G#3", "B3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "E2",
+                "notes": ["E2", "E3", "F#4", "G#4", "B4", "E5"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High E5",
+                "notes": ["E5", "E6", "B6"]
+            }]
+        },{
+            "name": "E",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low B octave",
+                "notes": ["B1", "B2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "B",
+                "notes": ["B2", "B3", "D#3", "F#4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "B2",
+                "notes": ["B2", "B3", "F#3", "B3", "C#4", "F#4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High B5",
+                "notes": ["F#5", "B5", "F#6"]
+            }]
+        },{
+            "name": "F",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low C octave",
+                "notes": ["C1", "C2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "C",
+                "notes": ["C2", "C3", "E3", "G4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "C2",
+                "notes": ["C2", "C3", "G3", "C4", "D4", "E4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High C5",
+                "notes": ["G5", "C5", "G6"]
             }]
         }]
     },{
@@ -214,18 +550,18 @@
                 "notes": ["A1", "A2"]
             },{
                 "registerName": "Middle",
-                "chordName": "Am7",
-                "notes": ["A2", "A3", "E4", "G4", "C4", "E4"]
+                "chordName": "Am",
+                "notes": ["A2", "A3", "E4", "C4", "E4"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
                 "chordName": "Am9",
-                "notes": ["A2", "A3", "E3", "G3", "B3", "C4"]
+                "notes": ["A1", "A2", "E3", "G3", "B3", "C4"]
             },{
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High A5",
-                "notes": ["A5", "E5", "A6"]
+                "notes": ["E5", "A5", "C6"]
             }]
         },{
             "name": "G",
@@ -235,8 +571,8 @@
                 "notes": ["E1", "E2"]
             },{
                 "registerName": "Middle",
-                "chordName": "Em7",
-                "notes": ["E2", "E3", "D4", "G4", "B4"]
+                "chordName": "Em",
+                "notes": ["E2", "E3", "G3", "B3"]
             },{
                 "spread": "Up",
                 "registerName": "Wide",
@@ -246,7 +582,91 @@
                 "spread": "Down",
                 "registerName": "High",
                 "chordName": "High Em5",
-                "notes": ["E4", "E5", "B5"]
+                "notes": ["E5", "B5", "E6"]
+            }]
+        },{
+            "name": "D",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low B octave",
+                "notes": ["B1", "B2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Bm",
+                "notes": ["B2", "B3", "F#4", "D4", "F#4"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Bm9",
+                "notes": ["B1", "B2", "F#3", "A3", "C#4", "D4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High B5",
+                "notes": ["F#5", "B5", "D6"]
+            }]
+        },{
+            "name": "A",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low F# octave",
+                "notes": ["F#1", "F#2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "F#m",
+                "notes": ["F#2", "F#3", "A3", "C#3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "F#m9",
+                "notes": ["F#2", "F#3", "E4", "G#4", "A4", "C#4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High F#m5",
+                "notes": ["F#5", "C#5", "F#6"]
+            }]
+        },{
+            "name": "E",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low C# octave",
+                "notes": ["C#1", "C#2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "C#m",
+                "notes": ["C#2", "C#3", "E3", "G#3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "C#m9",
+                "notes": ["C#1", "C#2", "G#3", "B3", "D#4", "E4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High C#5",
+                "notes": ["G#5", "C#5", "E6"]
+            }]
+        },{
+            "name": "F",
+            "chords": [{
+                "registerName": "Low",
+                "chordName": "Low D octave",
+                "notes": ["D1", "D2"]
+            },{
+                "registerName": "Middle",
+                "chordName": "Dm",
+                "notes": ["D2", "D3", "F3", "A3"]
+            },{
+                "spread": "Up",
+                "registerName": "Wide",
+                "chordName": "Dm9",
+                "notes": ["D1", "D2", "A3", "C3", "E4", "F4"]
+            },{
+                "spread": "Down",
+                "registerName": "High",
+                "chordName": "High Dm5",
+                "notes": ["A5", "D5", "F6"]
             }]
         }]
     }]

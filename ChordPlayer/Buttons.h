@@ -14,17 +14,4 @@ class Button {
     }
 };
 
-// get the button with the given index
-JsonObject getButton(DynamicJsonDocument jsonDoc, int buttonIndex) {
-  JsonArray array = jsonDoc["buttons"].as<JsonArray>();
-  for(JsonObject button : array) {
-      if (button["index"].as<int>() == buttonIndex) {
-        return button;
-      }
-  }
-  JsonObject nullObj = JsonObject();
-  nullObj["index"] = "-1";
-  return nullObj;
-}
-
 #endif

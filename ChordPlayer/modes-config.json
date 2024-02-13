@@ -1,0 +1,403 @@
+{
+    "modes": [{
+        "name": "Synth Voices",
+        "midiChannel": 1,
+        "defaultButtons": [{
+            "name": "A",
+            "action": "BankDown"
+        },{
+            "name": "B",
+            "action": "BankUp"
+        },{
+            "name": "C",
+            "action": "ModeDown"
+        },{
+            "name": "D",
+            "action": "ModeUp"
+        }],
+        "banks": [{
+            "name": "Patch 1-6",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "Pad 1",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 0
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "Pad 2",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 1
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "Strings 1",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 2
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "Strings 2",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 3
+                }]
+            },{
+                "name": "5",
+                "action": "SendMIDIMessages",
+                "displayText": "Celli",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 4
+                }]
+            },{
+                "name": "6",
+                "action": "SendMIDIMessages",
+                "displayText": "Warm Choir",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 5
+                }]
+            }]
+        },{
+            "name": "Patch 7 - 12",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "Long Choir",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 6
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "High Pad 1",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 7
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "High Pad 2",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 8
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "Scandi Pad",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 9
+                }]
+            },{
+                "name": "5",
+                "action": "SendMIDIMessages",
+                "displayText": "Synth Strings",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 10
+                }]
+            },{
+                "name": "6",
+                "action": "SendMIDIMessages",
+                "displayText": "Big Phase Pad",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 11
+                }]
+            }]
+        },{
+            "name": "Patch 13 - 16",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "80s synth strings",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 12
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "Hammond",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 13
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "Slow Texture",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 14
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "Big Pad",
+                "messages": [{
+                    "type": "ControlChange",
+                    "number": 0,
+                    "value": 15
+                }]
+            }]
+        }]
+    },{
+        "name": "C Major",
+        "defaultButtons": [{
+            "name": "A",
+            "action": "BankDown"
+        },{
+            "name": "B",
+            "action": "BankUp"
+        },{
+            "name": "C",
+            "action": "ModeDown"
+        },{
+            "name": "D",
+            "action": "ModeUp"
+        },{
+            "name": "6",
+            "action": "ToggleButtonActions",
+            "buttons": [{
+                "names": "C",
+                "actions": [{
+                    "action": "ModeDown"
+                },{
+                    "action": "MidiChannelDown"
+                }]
+            },{
+                "names": "D",
+                "actions": [{
+                    "action": "ModeUp"
+                },{
+                    "action": "MidiChannelUp"
+                }]
+            }]
+        }],
+        "exclusiveGroups": [{
+            "name": "Chords",
+            "buttons": ["1", "2", "3", "4", "5"]
+        }],
+        "banks": [{
+            "name": "Mid",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "C",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["C2", "C3", "E3", "G3"]
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "Dm7",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["D2", "D3", "F3", "A3", "C4"]
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "F",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["F2", "C3", "F3", "A3"]
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "G",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["G2", "G3", "B3", "D4"]
+                }]
+            },{
+                "name": "5",
+                "action": "SendMIDIMessages",
+                "displayText": "Am",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names":  ["A2", "A3", "E4", "C4", "E4"]
+                }]
+            }]
+        },{
+            "name": "Wide",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "C2",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["C2", "C3", "G3", "D4", "E4", "G4"]
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "Dm9",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["D2", "D3", "A3", "C4", "E4", "F4"]
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "F2",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["F2", "F3", "C3", "G3", "A3", "C4"]
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "G2",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["G1", "G2", "D3", "G3", "A3", "G3"]
+                }]
+            },{
+                "name": "5",
+                "action": "SendMIDIMessages",
+                "displayText": "Am9",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names":  ["A1", "A2", "E3", "G3", "B3", "C4"]
+                }]
+            }]
+        },{
+            "name": "High",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "C",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["C5", "G5", "C6"]
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "Dm7",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["D5", "A5", "D6"]
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "F",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["C5", "F5", "C6"]
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "G",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["D5", "G5", "D6"]
+                }]
+            },{
+                "name": "5",
+                "action": "SendMIDIMessages",
+                "displayText": "Am",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names":  ["E5", "A5", "C6"]
+                }]
+            }]
+        },{
+            "name": "Low",
+            "buttons": [{
+                "name": "1",
+                "action": "SendMIDIMessages",
+                "displayText": "C8",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["C1", "C2"]
+                }]
+            },{
+                "name": "2",
+                "action": "SendMIDIMessages",
+                "displayText": "D8",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["D1", "D2"]
+                }]
+            },{
+                "name": "3",
+                "action": "SendMIDIMessages",
+                "displayText": "F8",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["F1", "F2"]
+                }]
+            },{
+                "name": "4",
+                "action": "SendMIDIMessages",
+                "displayText": "G8",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names": ["G1", "G2"]
+                }]
+            },{
+                "name": "5",
+                "action": "SendMIDIMessages",
+                "displayText": "A8",
+                "latch": true,
+                "messages": [{
+                    "type": "Notes",
+                    "names":  ["A1", "A2"]
+                }]
+            }]
+        }]
+    }]
+}
